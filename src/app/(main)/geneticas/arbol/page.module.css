@@ -1,0 +1,444 @@
+.page {
+    position: relative;
+    padding-top: var(--nav-height);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    text-align: center;
+    padding: var(--space-10) 0 var(--space-4);
+    position: relative;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Allow the absolutely positioned button inside to capture clicks */
+.header>* {
+    pointer-events: auto;
+}
+
+.title {
+    font-size: var(--text-4xl);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-top: var(--space-2);
+}
+
+.canvasContainer {
+    flex-grow: 1;
+    position: relative;
+    z-index: 5;
+    overflow: hidden;
+    display: flex;
+}
+
+/* Override default ReactFlow UI to match Jelly Genetics styling */
+:global(.react-flow__controls-button) {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-primary) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+:global(.react-flow__controls-button:hover) {
+    background: var(--glass-bg-hover) !important;
+}
+
+/* Hide the unpolished connecting dots for a much cleaner architecture */
+:global(.react-flow__handle) {
+    opacity: 0 !important;
+}
+
+/* Ensure hovered nodes (and their nested tooltips) render above all other nodes */
+:global(.react-flow__node:hover) {
+    z-index: 1000 !important;
+}
+
+/* ====================================================
+   HALL OF FAME (MUSEUM GALLERY) 
+   ==================================================== */
+.hallOfFame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    gap: var(--space-8);
+    padding: var(--space-8);
+    z-index: 10;
+}
+
+.eraCard {
+    cursor: pointer;
+    position: relative;
+    transition: all var(--duration-normal) var(--ease-out-expo);
+    width: 320px;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+}
+
+.eraCard:hover {
+    transform: scale(1.05) translateY(-10px);
+}
+
+.eraLogoWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.eraLogo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform var(--duration-slower) var(--ease-out-expo), filter var(--duration-normal);
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.1));
+}
+
+.eraCard:hover .eraLogo {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.4));
+}
+
+/* ====================================================
+   LORE PANEL (SPLIT SIDEBAR)
+   ==================================================== */
+.loreSidebar {
+    width: 450px;
+    height: 100%;
+    background: rgba(5, 11, 26, 0.4);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-right: 1px solid var(--glass-border);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+    color: var(--text-primary);
+    overflow-y: auto;
+    z-index: 20;
+    flex-shrink: 0;
+}
+
+.lorePhoto {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+    object-fit: cover;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.loreTitle {
+    font-size: var(--text-3xl);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #ffffff;
+    margin-bottom: var(--space-4);
+    font-weight: 700;
+}
+
+.loreText {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+/* Fix missing spaces inside the Framer Motion spans */
+.loreText span {
+    display: inline;
+    white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+    .canvasContainer {
+        flex-direction: column;
+    }
+
+    .loreSidebar {
+        width: 100%;
+        height: auto;
+        max-height: 50vh;
+        border-right: none;
+        border-bottom: 1px solid var(--glass-border);
+        background: rgba(5, 11, 26, 0.8);
+    }
+}
+
+/* ====================================================
+   CUSTOM REACT FLOW NODES & TOOLTIPS
+   ==================================================== */
+.customNode {
+    position: relative;
+    background: rgba(5, 11, 26, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(74, 144, 226, 0.3);
+    border-radius: 16px;
+    color: #fff;
+    padding: 15px 25px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    width: 180px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.customNode:hover {
+    border-color: rgba(74, 144, 226, 0.8);
+    box-shadow: 0 0 20px rgba(74, 144, 226, 0.4);
+}
+
+.nodeHighlight {
+    border-color: #ffffff;
+    background: rgba(74, 144, 226, 0.15);
+    box-shadow: 0 0 40px rgba(74, 144, 226, 0.4);
+    width: 220px;
+    font-size: 1.2rem;
+}
+
+.nodeTooltip {
+    position: absolute;
+    left: 50%;
+    width: 280px;
+    padding: 15px;
+    background: rgba(5, 11, 26, 0.95);
+    border: 1px solid var(--glass-border-hover);
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    /* expo ease */
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.tooltipTop {
+    bottom: 120%;
+    transform: translateX(-50%) translateY(10px);
+}
+
+.customNode:hover .tooltipTop {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.tooltipBottom {
+    top: 120%;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+.customNode:hover .tooltipBottom {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.tooltipImage {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border: 1px solid var(--glass-border);
+}
+
+.tooltipText {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    text-align: left;
+    font-weight: normal;
+    /* Limit to ~256 chars visually if needed, but text will natively wrap */
+}
+
+/* Ensure edges connect cleanly through the transparent handles */
+.hiddenHandle {
+    opacity: 0 !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+/* === Pop Rosa specific logo drop shadows === */
+.popRosaLogo {
+    filter: drop-shadow(0 0 5px rgba(244, 114, 182, 0.15)) !important;
+}
+
+.eraCard:hover .popRosaLogo {
+    filter: drop-shadow(0 0 25px rgba(244, 114, 182, 0.55)) !important;
+}
+
+/* === Theme-poprosa ReactFlow Custom Node overrides === */
+:global(.theme-poprosa) .customNode {
+    border-color: rgba(244, 114, 182, 0.3);
+}
+
+:global(.theme-poprosa) .customNode:hover {
+    border-color: rgba(244, 114, 182, 0.8);
+    box-shadow: 0 0 20px rgba(244, 114, 182, 0.4);
+}
+
+:global(.theme-poprosa) .nodeHighlight {
+    border-color: #ffffff;
+    background: rgba(244, 114, 182, 0.15);
+    box-shadow: 0 0 40px rgba(244, 114, 182, 0.4);
+}
+
+/* === Ghost Kong specific logo drop shadows === */
+.ghostKongLogo {
+    filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.15)) !important;
+}
+
+.eraCard:hover .ghostKongLogo {
+    filter: drop-shadow(0 0 25px rgba(16, 185, 129, 0.55)) !important;
+}
+
+/* === Theme-ghostkong ReactFlow Custom Node overrides === */
+:global(.theme-ghostkong) .customNode {
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+:global(.theme-ghostkong) .customNode:hover {
+    border-color: rgba(16, 185, 129, 0.8);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+:global(.theme-ghostkong) .nodeHighlight {
+    border-color: #ffffff;
+    background: rgba(16, 185, 129, 0.15);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
+}
+
+/* === Tab Navigation Styles for Lines === */
+.tabsContainer {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+}
+
+.tabButton {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: var(--space-2) var(--space-6);
+    border-radius: var(--radius-full);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    transition: all var(--duration-normal) var(--ease-out-expo);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+}
+
+.tabButton:hover {
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-hover);
+    color: var(--text-primary);
+}
+
+.activeTabButton {
+    background: var(--brand-amber) !important;
+    border-color: var(--brand-amber) !important;
+    color: var(--text-primary) !important;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+/* === Theme-specific Active Tab Button overrides === */
+:global(.theme-blizzard) .activeTabButton {
+    background: #4a90e2 !important;
+    border-color: #4a90e2 !important;
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.4);
+}
+
+:global(.theme-poprosa) .activeTabButton {
+    background: #f472b6 !important;
+    border-color: #f472b6 !important;
+    box-shadow: 0 0 15px rgba(244, 114, 182, 0.4);
+}
+
+:global(.theme-ghostkong) .activeTabButton {
+    background: #10b981 !important;
+    border-color: #10b981 !important;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+:global(.theme-pandemuerto) .activeTabButton {
+    background: #ff6600 !important;
+    border-color: #ff6600 !important;
+    box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
+}
+
+/* === Pan de Muerto specific logo drop shadows === */
+.panDeMuertoLogo {
+    filter: drop-shadow(0 0 5px rgba(255, 102, 0, 0.15)) !important;
+}
+
+.eraCard:hover .panDeMuertoLogo {
+    filter: drop-shadow(0 0 25px rgba(255, 102, 0, 0.55)) !important;
+}
+
+/* === Theme-pandemuerto ReactFlow Custom Node overrides === */
+:global(.theme-pandemuerto) .customNode {
+    border-color: rgba(255, 102, 0, 0.3);
+}
+
+:global(.theme-pandemuerto) .customNode:hover {
+    border-color: rgba(255, 102, 0, 0.8);
+    box-shadow: 0 0 20px rgba(255, 102, 0, 0.4);
+}
+
+:global(.theme-pandemuerto) .nodeHighlight {
+    border-color: #ffffff;
+    background: rgba(255, 102, 0, 0.15);
+    box-shadow: 0 0 40px rgba(255, 102, 0, 0.4);
+}
+
+:global(.theme-jupiterjelly) .activeTabButton {
+    background: #f59e0b !important;
+    border-color: #f59e0b !important;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+}
+
+/* === Jupiter Jelly specific logo drop shadows === */
+.jupiterJellyLogo {
+    filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.15)) !important;
+}
+
+.eraCard:hover .jupiterJellyLogo {
+    filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.55)) !important;
+}
+
+/* === Theme-jupiterjelly ReactFlow Custom Node overrides === */
+:global(.theme-jupiterjelly) .customNode {
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+:global(.theme-jupiterjelly) .customNode:hover {
+    border-color: rgba(245, 158, 11, 0.8);
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+:global(.theme-jupiterjelly) .nodeHighlight {
+    border-color: #ffffff;
+    background: rgba(245, 158, 11, 0.15);
+    box-shadow: 0 0 40px rgba(245, 158, 11, 0.4);
+}

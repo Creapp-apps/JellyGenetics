@@ -1,0 +1,430 @@
+/* ===== GENETIC DETAIL PAGE ===== */
+
+.page {
+    padding-top: var(--nav-height);
+}
+
+.notFound {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-6);
+}
+
+/* Hero */
+.hero {
+    position: relative;
+    padding: var(--space-10) 0 var(--space-16);
+    overflow: hidden;
+}
+
+.heroBg {
+    position: absolute;
+    inset: 0;
+}
+
+.heroContent {
+    position: relative;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-8);
+}
+
+.breadcrumb a {
+    color: var(--text-tertiary);
+    transition: color var(--duration-normal);
+}
+
+.breadcrumb a:hover {
+    color: var(--brand-amber);
+}
+
+.breadcrumb span:last-child {
+    color: var(--text-primary);
+}
+
+/* Hero Grid */
+.heroGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: start;
+}
+
+/* Image Section */
+.imageSection {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-6));
+}
+
+.imageBox {
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+}
+
+.imagePlaceholder {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    background: var(--bg-card);
+}
+
+.imageIcon {
+    font-size: 5rem;
+    opacity: 0.4;
+}
+
+.imageLabelText {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* Info Section */
+.infoSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.categoryBadge {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: var(--space-1) var(--space-4);
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid;
+    border-radius: var(--radius-full);
+}
+
+.strainName {
+    font-size: var(--text-5xl);
+    line-height: 1;
+}
+
+.description {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+/* Quick Stats */
+.quickStats {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+}
+
+.quickStat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    text-align: center;
+}
+
+.quickStatValue {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.quickStatLabel {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.quickStatDivider {
+    width: 1px;
+    height: 32px;
+    background: var(--glass-border);
+}
+
+/* Effects */
+.effectsRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.effectTag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+}
+
+/* Purchase Section */
+.purchaseSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+}
+
+.variantSelector {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.variantBtn {
+    flex: 1;
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--duration-normal);
+}
+
+.variantBtn:hover {
+    border-color: var(--glass-border-hover);
+}
+
+.variantActive {
+    border-color: var(--brand-amber);
+    color: var(--text-primary);
+    background: rgba(0, 255, 136, 0.05);
+}
+
+.variantPrice {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.variantActive .variantPrice {
+    color: var(--brand-amber);
+}
+
+/* Add to Cart Row */
+.addToCartRow {
+    display: flex;
+    gap: var(--space-3);
+}
+
+.quantityControl {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.qtyBtn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--duration-normal);
+}
+
+.qtyBtn:hover {
+    background: var(--glass-bg);
+    color: var(--text-primary);
+}
+
+.qtyValue {
+    width: 44px;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+
+.addToCartBtn {
+    flex: 1;
+}
+
+.addToCartBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+/* Extra Info */
+.extraInfo {
+    display: flex;
+    gap: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    flex-wrap: wrap;
+}
+
+/* ===== Description Section ===== */
+.descSection {
+    border-top: 1px solid var(--glass-border);
+}
+
+.descContent {
+    max-width: var(--container-narrow);
+}
+
+.longDesc {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.longDesc p {
+    font-size: var(--text-base);
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+/* ===== Section Common ===== */
+.sectionLabel {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--brand-amber);
+    display: block;
+    margin-bottom: var(--space-3);
+}
+
+.sectionTitle {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-8);
+}
+
+/* ===== Terpene Section ===== */
+.terpeneSection {
+    position: relative;
+    overflow: hidden;
+}
+
+.terpeneBg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent, rgba(0, 255, 136, 0.015), transparent);
+}
+
+.cannabinoidBars {
+    margin-top: var(--space-10);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    max-width: 600px;
+}
+
+.cannabinoidBar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.cannabinoidLabel {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.cannabinoidValue {
+    color: var(--text-primary);
+}
+
+.barTrack {
+    height: 8px;
+    background: var(--glass-bg);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.barFill {
+    height: 100%;
+    border-radius: 4px;
+    box-shadow: 0 0 10px currentColor;
+}
+
+/* ===== Lineage Section ===== */
+.lineageSection {
+    border-top: 1px solid var(--glass-border);
+}
+
+/* ===== Back Section ===== */
+.backSection {
+    padding: var(--space-12) 0 var(--space-16);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+    .heroGrid {
+        gap: var(--space-8);
+    }
+}
+
+@media (max-width: 768px) {
+    .heroGrid {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+    }
+
+    .imageSection {
+        position: static;
+    }
+
+    .strainName {
+        font-size: var(--text-3xl);
+    }
+
+    .quickStats {
+        flex-wrap: wrap;
+    }
+
+    .quickStatDivider:nth-child(4) {
+        display: none;
+    }
+
+    .addToCartRow {
+        flex-direction: column;
+    }
+
+    .sectionTitle {
+        font-size: var(--text-3xl);
+    }
+}

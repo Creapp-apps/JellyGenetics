@@ -1,0 +1,533 @@
+/* ===== HOME PAGE STYLES ===== */
+
+.page {
+    overflow-x: hidden;
+}
+
+/* ===========================
+   HERO SECTION
+   =========================== */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding-top: var(--nav-height);
+}
+
+.heroJellyfish {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Hero Content */
+.heroContent {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-6);
+    padding: var(--space-10) 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Badge */
+.heroBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: rgba(81, 40, 115, 0.2);
+    border: 1px solid rgba(81, 40, 115, 0.5);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--brand-purple);
+    letter-spacing: 0.1em;
+    backdrop-filter: blur(10px);
+}
+
+.heroBadgeDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--brand-purple);
+    box-shadow: 0 0 10px var(--brand-purple);
+}
+
+/* Title */
+.heroTitleWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    margin: var(--space-4) 0;
+}
+
+.heroCrown {
+    width: clamp(100px, 15vw, 160px);
+    height: auto;
+    object-fit: contain;
+    margin-bottom: var(--space-2);
+    filter: drop-shadow(0 0 30px rgba(246, 179, 52, 0.4));
+    z-index: 2;
+}
+
+.heroTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 0.9;
+    z-index: 1;
+}
+
+.heroTitleLine1 {
+    font-size: clamp(4rem, 12vw, 10rem);
+    font-weight: 700;
+    color: var(--brand-amber);
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 40px rgba(81, 40, 115, 0.5), 0 0 80px rgba(81, 40, 115, 0.3);
+}
+
+.heroTitleLine2 {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 0.5em;
+    margin-top: var(--space-2);
+}
+
+.visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Subtitle */
+.heroSubtitle {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    max-width: 500px;
+    line-height: 1.7;
+}
+
+/* CTAs */
+.heroCtas {
+    display: flex;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+    pointer-events: auto;
+}
+
+.heroBtnPrimary {
+    gap: var(--space-2);
+}
+
+.scrollIndicator {
+    position: absolute;
+    bottom: var(--space-8);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-tertiary);
+    font-size: var(--text-xs);
+    letter-spacing: 0.2em;
+    pointer-events: auto;
+    z-index: 30;
+}
+
+.scrollLine {
+    width: 1px;
+    height: 40px;
+    background: var(--glass-border);
+    position: relative;
+    overflow: hidden;
+    border-radius: 1px;
+}
+
+.scrollDot {
+    width: 1px;
+    height: 12px;
+    background: var(--brand-amber);
+    border-radius: 1px;
+    animation: scrollDown 2s ease-in-out infinite;
+    box-shadow: 0 0 6px rgba(0, 255, 136, 0.5);
+}
+
+@keyframes scrollDown {
+    0% {
+        transform: translateY(-12px);
+    }
+
+    100% {
+        transform: translateY(40px);
+    }
+}
+
+/* ===========================
+   FEATURED CAROUSEL
+   =========================== */
+.featuredSection {
+    position: relative;
+    border-top: 1px solid var(--glass-border);
+}
+
+/* ===========================
+   GENETICS SHOWCASE
+   =========================== */
+.geneticsSection {
+    position: relative;
+}
+
+.sectionHeader {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-12);
+}
+
+.sectionLabel {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--brand-amber);
+}
+
+/* Genetics Grid */
+.geneticsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+}
+
+/* Genetic Card */
+.geneticCard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: all var(--duration-slow) var(--ease-out-expo);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.geneticCard:hover {
+    transform: translateY(-8px);
+    border-color: var(--glass-border-hover);
+}
+
+.geneticCard:hover .cardGlow {
+    opacity: 1;
+}
+
+.geneticCard:hover .cardArrow {
+    transform: translateX(4px);
+    color: var(--brand-amber);
+}
+
+/* Card Glow */
+.cardGlow {
+    position: absolute;
+    inset: -1px;
+    border-radius: var(--radius-xl);
+    opacity: 0;
+    transition: opacity var(--duration-slow);
+    pointer-events: none;
+    z-index: 1;
+    box-shadow: 0 0 30px var(--glow-color, rgba(0, 255, 136, 0.15));
+}
+
+/* Card Image */
+.cardImage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+.cardImagePlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+}
+
+.cardImageIcon {
+    font-size: 3rem;
+    opacity: 0.5;
+}
+
+.cardTag {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    padding: var(--space-1) var(--space-3);
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg-primary);
+    background: var(--brand-amber);
+    border-radius: var(--radius-full);
+}
+
+/* Card Info */
+.cardInfo {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cardName {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+}
+
+.cardType {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* Card Meta */
+.cardMeta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: var(--glass-bg);
+    border-radius: var(--radius-lg);
+}
+
+.cardMetaItem {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cardMetaLabel {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.cardMetaValue {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.cardMetaDivider {
+    width: 1px;
+    height: 28px;
+    background: var(--glass-border);
+}
+
+/* Card Footer */
+.cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--glass-border);
+}
+
+.cardPrice {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.cardPrice small {
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--text-tertiary);
+}
+
+.cardArrow {
+    font-size: var(--text-xl);
+    color: var(--text-muted);
+    transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+/* View All */
+.viewAll {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-10);
+}
+
+/* ===========================
+   LAB STATS
+   =========================== */
+.labSection {
+    position: relative;
+    padding: var(--space-20) 0;
+    overflow: hidden;
+}
+
+.labBg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+            transparent,
+            rgba(0, 255, 136, 0.02) 30%,
+            rgba(0, 255, 136, 0.03) 50%,
+            rgba(0, 255, 136, 0.02) 70%,
+            transparent);
+}
+
+.labGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-8);
+    position: relative;
+}
+
+.labStat {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.labStatValue {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    font-weight: 700;
+    color: var(--brand-amber);
+    text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+}
+
+.labStatLabel {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ===========================
+   CTA SECTION
+   =========================== */
+.ctaSection {
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+}
+
+.ctaGlow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.06), transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+}
+
+.ctaContent {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+}
+
+.ctaTitle {
+    font-size: var(--text-5xl);
+}
+
+.ctaText {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    max-width: 500px;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 1024px) {
+    .geneticsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .labGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-10);
+    }
+}
+
+@media (max-width: 768px) {
+    .heroCtas {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .geneticsGrid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .labGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-6);
+    }
+
+    .labStatValue {
+        font-size: var(--text-4xl);
+    }
+
+    .ctaTitle {
+        font-size: var(--text-3xl);
+    }
+}
+
+@media (max-width: 480px) {
+    .heroSubtitle {
+        font-size: var(--text-base);
+    }
+
+    .scrollIndicator {
+        display: none;
+    }
+}

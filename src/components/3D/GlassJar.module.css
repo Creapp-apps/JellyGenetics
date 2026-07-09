@@ -1,0 +1,19 @@
+.container {
+    width: 100%;
+    aspect-ratio: 1;
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+/* Subtle background glow behind the jar */
+.container::before {
+    content: '';
+    position: absolute;
+    inset: 10%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.06), transparent 70%);
+    filter: blur(30px);
+    pointer-events: none;
+    z-index: 0;
+}

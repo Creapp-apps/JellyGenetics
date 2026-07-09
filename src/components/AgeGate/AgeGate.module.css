@@ -1,0 +1,243 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg-primary);
+    z-index: var(--z-max);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Background grid */
+.bgGrid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+/* Scanning line */
+.scanLine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--brand-amber), transparent);
+    opacity: 0.3;
+    animation: scanLine 4s linear infinite;
+}
+
+/* Floating particles */
+.particle {
+    position: absolute;
+    background: var(--brand-amber);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* Main content */
+.content {
+    position: relative;
+    text-align: center;
+    max-width: 520px;
+    padding: var(--space-10);
+}
+
+/* Logo */
+.logoContainer {
+    position: relative;
+    display: inline-block;
+    margin-bottom: var(--space-8);
+}
+
+.logoGlow {
+    position: absolute;
+    inset: -20px;
+    border-radius: var(--radius-2xl);
+    pointer-events: none;
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    font-family: var(--font-display);
+    line-height: 1;
+}
+
+.logoJelly {
+    font-size: var(--text-6xl);
+    font-weight: 700;
+    color: var(--brand-amber);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 30px rgba(0, 255, 136, 0.4), 0 0 60px rgba(0, 255, 136, 0.15);
+}
+
+.logoGenetics {
+    font-size: var(--text-xl);
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 0.4em;
+    margin-top: var(--space-2);
+}
+
+/* DNA Decoration */
+.dnaDecor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    color: var(--brand-amber);
+    opacity: 0.4;
+    font-size: var(--text-xs);
+}
+
+.dnaLine {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--brand-amber), transparent);
+}
+
+/* Question */
+.questionBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+}
+
+.question {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.disclaimer {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    line-height: 1.6;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+.btnAccept {
+    position: relative;
+    padding: var(--space-4) var(--space-8);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--bg-primary);
+    background: var(--brand-amber);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.btnAccept:hover {
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+}
+
+.btnGlow {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+    background-size: 200% 200%;
+    animation: shimmer 3s infinite;
+}
+
+.btnReject {
+    padding: var(--space-4) var(--space-8);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.btnReject:hover {
+    border-color: var(--red-danger);
+    color: var(--red-danger);
+}
+
+/* Reject message */
+.rejectMessage {
+    text-align: center;
+}
+
+.rejectMessage p {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+}
+
+.redirecting {
+    margin-top: var(--space-4);
+    font-size: var(--text-sm) !important;
+    color: var(--text-muted) !important;
+    animation: blink 1s infinite;
+}
+
+/* Legal */
+.legal {
+    margin-top: var(--space-10);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .logoJelly {
+        font-size: var(--text-5xl);
+    }
+
+    .logoGenetics {
+        font-size: var(--text-base);
+        letter-spacing: 0.3em;
+    }
+
+    .question {
+        font-size: var(--text-xl);
+    }
+
+    .buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btnAccept,
+    .btnReject {
+        width: 100%;
+    }
+}
