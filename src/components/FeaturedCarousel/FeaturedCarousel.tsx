@@ -22,7 +22,7 @@ interface FeaturedCarouselProps {
     strains: FeaturedStrain[]
 }
 
-const EASE = [0.19, 1, 0.22, 1] as const
+const EASE = [0.16, 1, 0.3, 1] as const // Motionsites cinematic ease curve
 
 export default function FeaturedCarousel({ strains }: FeaturedCarouselProps) {
     const [current, setCurrent] = useState(0)
@@ -47,133 +47,140 @@ export default function FeaturedCarousel({ strains }: FeaturedCarouselProps) {
 
     const strain = strains[current]
 
-    const slideVariants = {
-        enter: (dir: number) => ({
-            x: dir > 0 ? 300 : -300,
-            opacity: 0,
-            scale: 0.85,
-        }),
-        center: {
-            x: 0,
-            opacity: 1,
-            scale: 1,
-            transition: { duration: 0.5, ease: EASE },
-        },
-        exit: (dir: number) => ({
-            x: dir > 0 ? -300 : 300,
-            opacity: 0,
-            scale: 0.85,
-            transition: { duration: 0.4, ease: EASE },
-        }),
-    }
-
-    const infoVariants = {
-        enter: { opacity: 0, y: 20 },
-        center: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.4, delay: 0.15, ease: EASE },
-        },
-        exit: {
-            opacity: 0,
-            y: -20,
-            transition: { duration: 0.2 },
-        },
-    }
-
     return (
         <div className={styles.carousel}>
-            {/* Background glow that changes with terpene color */}
+            {/* Background glow that matches the terpene color */}
             <div
                 className={styles.bgGlow}
-                style={{ background: `radial-gradient(ellipse at 50% 50%, ${strain.terpeneColor}10, transparent 70%)` }}
+                style={{ background: `radial-gradient(ellipse at 50% 50%, ${strain.terpeneColor}15, transparent 75%)` }}
             />
 
-            <div className={styles.layout}>
-                {/* Left arrow */}
-                <button className={styles.navBtn} onClick={prev} aria-label="Anterior">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M15 18l-6-6 6-6" />
-                    </svg>
-                </button>
+            {/* Minimal top section label */}
+            <div className={styles.sectionHeader}>
+                <span className={styles.sectionLabel}>SELECCIÓN PREMIUM</span>
+                <span className={styles.sectionDivider} />
+                <span className={styles.sectionTitle}>GENÉTICAS DESTACADAS</span>
+            </div>
 
-                {/* Center — 3D Jar */}
-                <div className={styles.center}>
-                    <div className={styles.jarWrapper}>
-                        <AnimatePresence mode="wait" custom={direction}>
-                            <motion.div
-                                key={strain.slug}
-                                className={styles.jarContainer}
-                                custom={direction}
-                                variants={slideVariants}
-                                initial="enter"
-                                animate="center"
-                                exit="exit"
-                            >
-                                <GlassJarLazy
-                                    terpeneColor={strain.terpeneColor}
-                                    seedScale={1}
-                                    cameraZ={6.5}
-                                    autoRotate
-                                />
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
+            {/* Viewport Center: 3D Jar Canvas as an Immersive Background */}
+            <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                    key={`jar-${strain.slug}`}
+                    className={styles.jarWrapper}
+                    initial={{ opacity: 0, scale: 1.02, y: 40 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.98, y: -30 }}
+                    transition={{ duration: 1.6, ease: EASE }}
+                >
+                    <GlassJarLazy
+                        terpeneColor={strain.terpeneColor}
+                        seedScale={1.0}
+                        cameraZ={6.5}
+                        autoRotate
+                        className={styles.jarCanvasContainer}
+                    />
+                </motion.div>
+            </AnimatePresence>
 
-                    {/* Strain info below jar */}
-                    <AnimatePresence mode="wait">
+            {/* Left & Right floating navigation arrows */}
+            <button className={`${styles.navBtn} ${styles.btnLeft}`} onClick={prev} aria-label="Anterior">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <button className={`${styles.navBtn} ${styles.btnRight}`} onClick={next} aria-label="Siguiente">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            {/* Bottom Footer HUD Information Panel */}
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={`footer-${strain.slug}`}
+                    className={styles.footer}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -10, opacity: 0 }}
+                    transition={{ duration: 1.0, ease: EASE }}
+                >
+                    <div className={styles.leftBlock}>
+                        {/* Subtitle / Category Label */}
                         <motion.div
-                            key={strain.slug + '-info'}
-                            className={styles.strainInfo}
-                            variants={infoVariants}
-                            initial="enter"
-                            animate="center"
-                            exit="exit"
+                            className={styles.subtitleLine}
+                            initial={{ y: 16, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.2, duration: 0.8, ease: EASE }}
                         >
-                            <span className={styles.strainType} style={{ color: strain.terpeneColor }}>
-                                {strain.type}
-                            </span>
-                            <h3 className={styles.strainName}>{strain.name}</h3>
-                            <p className={styles.strainDesc}>{strain.description}</p>
+                            <span className={styles.subtitleDot} style={{ background: strain.terpeneColor, color: strain.terpeneColor }} />
+                            <span>{strain.type} — Perfil de Terpenos {strain.terpene}</span>
+                        </motion.div>
 
-                            <div className={styles.strainMeta}>
-                                <div className={styles.metaItem}>
-                                    <span className={styles.metaLabel}>THC</span>
-                                    <span className={styles.metaValue}>{strain.thc}</span>
-                                </div>
-                                <div className={styles.metaDivider} />
-                                <div className={styles.metaItem}>
-                                    <span className={styles.metaLabel}>Terpeno</span>
-                                    <span className={styles.metaValue} style={{ color: strain.terpeneColor }}>
-                                        {strain.terpene}
-                                    </span>
-                                </div>
-                                <div className={styles.metaDivider} />
-                                <div className={styles.metaItem}>
-                                    <span className={styles.metaLabel}>Precio</span>
-                                    <span className={styles.metaValue}>${strain.price.toLocaleString()} MXN</span>
-                                </div>
-                            </div>
+                        {/* Major Title */}
+                        <motion.h2
+                            className={styles.heading}
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.4, duration: 0.8, ease: EASE }}
+                        >
+                            {strain.name}
+                        </motion.h2>
 
+                        {/* Description */}
+                        <motion.p
+                            className={styles.description}
+                            initial={{ y: 16, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.6, duration: 0.8, ease: EASE }}
+                        >
+                            {strain.description}
+                        </motion.p>
+
+                        {/* Call to Action Button */}
+                        <motion.div
+                            className={styles.actions}
+                            initial={{ y: 16, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.8, duration: 0.8, ease: EASE }}
+                        >
                             <Link href={`/geneticas/${strain.slug}`} className={`btn btn-primary ${styles.exploreBtn}`}>
                                 Explorar Genética
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                     <path d="M5 12h14M12 5l7 7-7 7" />
                                 </svg>
                             </Link>
                         </motion.div>
-                    </AnimatePresence>
-                </div>
+                    </div>
 
-                {/* Right arrow */}
-                <button className={styles.navBtn} onClick={next} aria-label="Siguiente">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M9 18l6-6-6-6" />
-                    </svg>
-                </button>
-            </div>
+                    {/* Right Block — Ficha Técnica Spec Tags */}
+                    <motion.div
+                        className={styles.specsPanel}
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.7, duration: 0.8, ease: EASE }}
+                    >
+                        <div className={styles.specTag}>
+                            <span className={styles.specLabel}>THC</span>
+                            <span className={styles.specVal}>{strain.thc}</span>
+                        </div>
+                        <div className={styles.specTag}>
+                            <span className={styles.specLabel}>Terpeno Principal</span>
+                            <span className={styles.specVal} style={{ color: strain.terpeneColor }}>{strain.terpene}</span>
+                        </div>
+                        <div className={styles.specTag}>
+                            <span className={styles.specLabel}>Semilla</span>
+                            <span className={styles.specVal}>Feminizada</span>
+                        </div>
+                        <div className={styles.specTag}>
+                            <span className={styles.specLabel}>Precio</span>
+                            <span className={styles.specVal}>${strain.price.toLocaleString()} MXN</span>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            </AnimatePresence>
 
-            {/* Dot indicators */}
+            {/* Dot Indicator Navigation */}
             <div className={styles.dots}>
                 {strains.map((s, i) => (
                     <button
@@ -188,3 +195,4 @@ export default function FeaturedCarousel({ strains }: FeaturedCarouselProps) {
         </div>
     )
 }
+

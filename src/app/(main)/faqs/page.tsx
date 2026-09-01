@@ -60,11 +60,11 @@ const FAQ_CATEGORIES = [
         faqs: [
             {
                 q: '¿Qué métodos de pago aceptan?',
-                a: 'Aceptamos transferencia bancaria, MercadoPago y próximamente tarjetas de crédito/débito a través de Stripe. Todos los pagos se procesan de forma segura.',
+                a: 'Aceptamos tarjetas de crédito y débito internacionales (Visa, Mastercard, American Express), Apple Pay y Google Pay procesados de forma 100% segura a través de Stripe, además de Mercado Pago y transferencia bancaria.',
             },
             {
-                q: '¿Puedo pagar en cuotas?',
-                a: 'Sí, a través de MercadoPago podés pagar en hasta 12 cuotas sin interés en productos seleccionados.',
+                q: '¿Puedo pagar con tarjetas internacionales desde cualquier país?',
+                a: 'Sí, a través de nuestra pasarela oficial de Stripe podés abonar con tarjetas de cualquier parte del mundo con conversión automática de divisa.',
             },
             {
                 q: '¿Emiten factura?',

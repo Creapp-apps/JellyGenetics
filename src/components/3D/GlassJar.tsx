@@ -4,6 +4,7 @@ import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, Environment, Float, MeshTransmissionMaterial } from '@react-three/drei'
 import * as THREE from 'three'
+import { motion } from 'framer-motion'
 import styles from './GlassJar.module.css'
 
 interface GlassJarProps {
@@ -22,7 +23,12 @@ export default function GlassJar({
     className = '',
 }: GlassJarProps) {
     return (
-        <div className={`${styles.container} ${className}`}>
+        <motion.div
+            className={`${styles.container} ${className}`}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        >
             <Canvas
                 camera={{ position: [0, 0.2, cameraZ], fov: 35 }}
                 gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }}
@@ -42,7 +48,7 @@ export default function GlassJar({
 
                 <Environment preset="night" />
             </Canvas>
-        </div>
+        </motion.div>
     )
 }
 

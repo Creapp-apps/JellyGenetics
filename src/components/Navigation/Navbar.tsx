@@ -1,20 +1,22 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'framer-motion'
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useCartStore } from '@/store/useCartStore'
 import { useUIStore } from '@/store/useUIStore'
-import styles from './Navbar.module.css'
 import { useAdminStore } from '@/store/useAdminStore'
+import { NavBar as TubelightNavBar } from '@/components/ui/tubelight-navbar'
+import { Dna, GitBranch, ShoppingBag, BookOpen, HelpCircle } from 'lucide-react'
+import styles from './Navbar.module.css'
 
-const navLinks = [
-    { href: '/geneticas', label: 'Genéticas' },
-    { href: '/arbol', label: 'Árbol' },
-    { href: '/merch', label: 'Merch' },
-    { href: '/blog', label: 'Blog' },
-    { href: '/faqs', label: 'FAQs' },
+const navItems = [
+    { name: 'Genéticas', url: '/geneticas', icon: Dna },
+    { name: 'Árbol', url: '/arbol', icon: GitBranch },
+    { name: 'Merch', url: '/merch', icon: ShoppingBag },
+    { name: 'Blog', url: '/blog', icon: BookOpen },
+    { name: 'FAQs', url: '/faqs', icon: HelpCircle },
 ]
 
 export default function Navbar() {
@@ -22,7 +24,7 @@ export default function Navbar() {
     const [hidden, setHidden] = useState(false)
     const lastScrollY = useRef(0)
     const { scrollY } = useScroll()
-    const { mobileMenuOpen, toggleMobileMenu, closeMobileMenu, toggleCartDrawer } = useUIStore()
+    const { toggleCartDrawer } = useUIStore()
     const itemCount = useCartStore((s) => s.getItemCount())
     
     const { siteSettings } = useAdminStore()
@@ -34,7 +36,7 @@ export default function Navbar() {
 
     useMotionValueEvent(scrollY, 'change', (latest) => {
         const direction = latest > lastScrollY.current ? 'down' : 'up'
-        if (direction === 'down' && latest > 200 && !mobileMenuOpen) {
+        if (direction === 'down' && latest > 200) {
             setHidden(true)
         } else {
             setHidden(false)
@@ -43,24 +45,10 @@ export default function Navbar() {
         lastScrollY.current = latest
     })
 
-    const handleLinkClick = useCallback(() => {
-        closeMobileMenu()
-    }, [closeMobileMenu])
-
-    useEffect(() => {
-        if (mobileMenuOpen) {
-            document.body.style.overflow = 'hidden'
-        } else {
-            document.body.style.overflow = ''
-        }
-        return () => {
-            document.body.style.overflow = ''
-        }
-    }, [mobileMenuOpen])
-
     return (
         <>
-            <motion.nav
+            {/* Floating Logo and Cart fixed container */}
+            <motion.header
                 className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}
                 initial={{ y: 0 }}
                 animate={{ y: hidden ? -100 : 0 }}
@@ -68,7 +56,7 @@ export default function Navbar() {
             >
                 <div className={`container ${styles.navContent}`}>
                     {/* Logo */}
-                    <Link href="/" className={styles.logo} onClick={handleLinkClick}>
+                    <Link href="/" className={styles.logo}>
                         <Image
                             src={mounted && siteSettings?.logoUrl ? siteSettings.logoUrl : "/coronajelly.png"}
                             alt="Jelly Genetics Logo"
@@ -79,19 +67,8 @@ export default function Navbar() {
                         />
                     </Link>
 
-                    {/* Desktop Links */}
-                    <div className={styles.desktopLinks}>
-                        {navLinks.map((link) => (
-                            <Link key={link.href} href={link.href} className={styles.navLink}>
-                                <span>{link.label}</span>
-                                <span className={styles.linkUnderline} />
-                            </Link>
-                        ))}
-                    </div>
-
-                    {/* Right section */}
+                    {/* Right section - Cart */}
                     <div className={styles.rightSection}>
-                        {/* Cart button */}
                         <button
                             className={styles.cartBtn}
                             onClick={toggleCartDrawer}
@@ -113,53 +90,16 @@ export default function Navbar() {
                                 </motion.span>
                             )}
                         </button>
-
-                        {/* Mobile Hamburger */}
-                        <button
-                            className={`${styles.hamburger} ${mobileMenuOpen ? styles.active : ''}`}
-                            onClick={toggleMobileMenu}
-                            aria-label="Menú"
-                        >
-                            <span />
-                            <span />
-                            <span />
-                        </button>
                     </div>
                 </div>
-            </motion.nav>
+            </motion.header>
 
-            {/* Mobile Menu */}
-            <AnimatePresence>
-                {mobileMenuOpen && (
-                    <motion.div
-                        className={styles.mobileMenu}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <div className={styles.mobileMenuContent}>
-                            {navLinks.map((link, i) => (
-                                <motion.div
-                                    key={link.href}
-                                    initial={{ opacity: 0, x: -30 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -30 }}
-                                    transition={{ delay: i * 0.1, duration: 0.4 }}
-                                >
-                                    <Link
-                                        href={link.href}
-                                        className={styles.mobileLink}
-                                        onClick={handleLinkClick}
-                                    >
-                                        {link.label}
-                                    </Link>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* Central Floating Tubelight Navigation Bar */}
+            <TubelightNavBar 
+                items={navItems} 
+                className={hidden ? styles.navHidden : ""} 
+            />
         </>
     )
 }
+

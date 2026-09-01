@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import GlassJarLazy from '@/components/3D/GlassJarLazy'
 import FeaturedCarousel from '@/components/FeaturedCarousel/FeaturedCarousel'
+import GeneticsCylinderCarousel from '@/components/GeneticsCylinderCarousel/GeneticsCylinderCarousel'
 import styles from './page.module.css'
 import { useAdminStore } from '@/store/useAdminStore'
 import JellyfishLazy from '@/components/ui/JellyfishLazy'
@@ -161,31 +162,8 @@ export default function HomePage() {
             </section>
 
             {/* ===== FEATURED GENETICS CAROUSEL ===== */}
-            <section className={`section ${styles.featuredSection}`} ref={featuredRef}>
-                <div className="container">
-                    <motion.div
-                        className={styles.sectionHeader}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={featuredInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
-                    >
-                        <span className={styles.sectionLabel}>DESTACADAS</span>
-                        <h2 className="section-title">
-                            Genéticas <span className="gradient-text">Destacadas</span>
-                        </h2>
-                        <p className="section-subtitle">
-                            Nuestras cepas más populares, seleccionadas por su calidad y potencia excepcional.
-                        </p>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={featuredInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.8, delay: 0.2, ease: EASE_OUT_EXPO }}
-                    >
-                        <FeaturedCarousel strains={FEATURED_GENETICS} />
-                    </motion.div>
-                </div>
+            <section className={styles.featuredSection} ref={featuredRef}>
+                <FeaturedCarousel strains={FEATURED_GENETICS} />
             </section>
 
             {/* ===== GENETICS SHOWCASE ===== */}
@@ -209,67 +187,12 @@ export default function HomePage() {
                     </motion.div>
 
                     <motion.div
-                        className={styles.geneticsGrid}
-                        variants={staggerContainer}
                         initial="hidden"
                         animate={geneticsInView ? 'visible' : 'hidden'}
+                        variants={staggerItem}
+                        style={{ marginTop: '40px', overflow: 'visible' }}
                     >
-                        {FEATURED_GENETICS.map((strain) => (
-                            <motion.div key={strain.slug} variants={staggerItem}>
-                                <Link href={`/geneticas/${strain.slug}`} className={styles.geneticCard}>
-                                    {/* Card glow border */}
-                                    <div
-                                        className={styles.cardGlow}
-                                        style={{ '--glow-color': strain.terpeneColor } as React.CSSProperties}
-                                    />
-
-                                    {/* 3D Jar */}
-                                    <div className={styles.cardImage}>
-                                        <GlassJarLazy
-                                            terpeneColor={strain.terpeneColor}
-                                            seedScale={0.8}
-                                            cameraZ={7.5}
-                                            autoRotate
-                                        />
-                                        <span className={styles.cardTag}>{strain.tag}</span>
-                                    </div>
-
-                                    {/* Card Info */}
-                                    <div className={styles.cardInfo}>
-                                        <div className={styles.cardHeader}>
-                                            <h3 className={styles.cardName}>{strain.name}</h3>
-                                            <span
-                                                className={styles.cardType}
-                                                style={{ color: strain.terpeneColor }}
-                                            >
-                                                {strain.type}
-                                            </span>
-                                        </div>
-
-                                        <div className={styles.cardMeta}>
-                                            <div className={styles.cardMetaItem}>
-                                                <span className={styles.cardMetaLabel}>THC</span>
-                                                <span className={styles.cardMetaValue}>{strain.thc}</span>
-                                            </div>
-                                            <div className={styles.cardMetaDivider} />
-                                            <div className={styles.cardMetaItem}>
-                                                <span className={styles.cardMetaLabel}>Terpeno</span>
-                                                <span className={styles.cardMetaValue} style={{ color: strain.terpeneColor }}>
-                                                    {strain.terpene}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div className={styles.cardFooter}>
-                                            <span className={styles.cardPrice}>
-                                                ${strain.price.toLocaleString()} <small>MXN</small>
-                                            </span>
-                                            <span className={styles.cardArrow}>→</span>
-                                        </div>
-                                    </div>
-                                </Link>
-                            </motion.div>
-                        ))}
+                        <GeneticsCylinderCarousel strains={FEATURED_GENETICS} />
                     </motion.div>
 
                     <motion.div

@@ -1,14 +1,16 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { motion, useInView } from 'framer-motion'
 import Link from 'next/link'
 import { getGeneticBySlug } from '@/lib/data'
+import type { GeneticProduct } from '@/lib/data'
 import { useCartStore } from '@/store/useCartStore'
 import TerpeneChart from '@/components/Charts/TerpeneChart'
 import LineageTree from '@/components/Genealogy/LineageTree'
 import GlassJarLazy from '@/components/3D/GlassJarLazy'
+import { supabase } from '@/lib/supabaseClient'
 import styles from './page.module.css'
 
 const EASE = [0.19, 1, 0.22, 1] as const
@@ -22,8 +24,9 @@ const EFFECT_ICONS: Record<string, string> = {
 export default function GeneticDetailPage() {
     const params = useParams()
     const slug = params.slug as string
-    const strain = getGeneticBySlug(slug)
-
+    
+    const [strain, setStrain] = useState<GeneticProduct | undefined>(getGeneticBySlug(slug))
+    const [loading, setLoading] = useState(!strain)
     const [selectedVariant, setSelectedVariant] = useState(0)
     const [quantity, setQuantity] = useState(1)
     const [addedToCart, setAddedToCart] = useState(false)
@@ -33,6 +36,73 @@ export default function GeneticDetailPage() {
     const lineageRef = useRef(null)
     const terpeneInView = useInView(terpeneRef, { once: true, margin: '-80px' })
     const lineageInView = useInView(lineageRef, { once: true, margin: '-80px' })
+
+    useEffect(() => {
+        async function loadStrain() {
+            if (!supabase) {
+                setLoading(false)
+                return
+            }
+            try {
+                const { data, error } = await supabase
+                    .from('genetics')
+                    .select('*')
+                    .eq('slug', slug)
+                    .maybeSingle()
+                if (error) throw error
+                if (data) {
+                    const mapped: GeneticProduct = {
+                        id: data.id,
+                        slug: data.slug,
+                        name: data.name,
+                        type: 'genetic',
+                        category: data.type as any,
+                        description: data.description || '',
+                        longDescription: data.longDescription || data.description || '',
+                        price: data.packs && data.packs.length > 0 ? Number(data.packs[0].price) : 1149,
+                        variants: data.packs ? data.packs.map((p: any) => ({ id: `${data.id}-${p.size}`, name: p.size, price: Number(p.price), stock: Number(p.stock) })) : [],
+                        thc: parseFloat(data.thc) || 0,
+                        cbd: parseFloat(data.cbd) || 0,
+                        terpenes: data.terpenes ? data.terpenes.map((t: any) => ({ name: t.name, value: Number(t.percentage || t.value || 0), color: t.color, description: t.description || '' })) : [],
+                        dominantTerpene: data.terpene || '',
+                        terpeneColor: data.terpene_color || '#00FF88',
+                        effects: data.effects || [],
+                        floweringTime: (() => {
+                            if (!data.flowering_time) return { min: 56, max: 63, unit: 'días' }
+                            const match = data.flowering_time.match(/(\d+)-(\d+)/)
+                            if (match) return { min: parseInt(match[1]), max: parseInt(match[2]), unit: 'días' }
+                            const singleMatch = data.flowering_time.match(/(\d+)/)
+                            if (singleMatch) return { min: parseInt(singleMatch[1]), max: parseInt(singleMatch[1]), unit: 'días' }
+                            return { min: 56, max: 63, unit: 'días' }
+                        })(),
+                        yield: data.yield || '450-550 g/m²',
+                        difficulty: (data.difficulty as any) || 'Medium',
+                        lineage: {
+                            mother: { name: data.lineage?.mother || 'Unknown' },
+                            father: { name: data.lineage?.father || 'Unknown' },
+                        },
+                        images: [],
+                        tag: data.seed_type || 'fem',
+                        inStock: data.packs ? data.packs.some((p: any) => Number(p.stock) > 0) : false,
+                    }
+                    setStrain(mapped)
+                }
+            } catch (err) {
+                console.error('Error loading strain from Supabase:', err)
+            } finally {
+                setLoading(false)
+            }
+        }
+        loadStrain()
+    }, [slug])
+
+    if (loading) {
+        return (
+            <div className={styles.notFound}>
+                <h2>Cargando genética...</h2>
+            </div>
+        )
+    }
 
     if (!strain) {
         return (

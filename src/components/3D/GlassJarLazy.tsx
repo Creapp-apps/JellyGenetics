@@ -19,29 +19,31 @@ interface GlassJarLazyProps {
 
 export default function GlassJarLazy(props: GlassJarLazyProps) {
     return (
-        <Suspense fallback={<JarPlaceholder />}>
+        <Suspense fallback={<JarPlaceholder terpeneColor={props.terpeneColor} />}>
             <GlassJar {...props} />
         </Suspense>
     )
 }
 
-function JarPlaceholder() {
+function JarPlaceholder({ terpeneColor = '#00FF88' }: { terpeneColor?: string }) {
     return (
         <div className={styles.container} style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'var(--bg-tertiary)',
+            background: 'transparent',
         }}>
             <div style={{
                 width: '40px',
                 height: '40px',
-                border: '2px solid var(--glass-border)',
-                borderTopColor: 'var(--brand-amber)',
+                border: '2px solid rgba(255, 255, 255, 0.05)',
+                borderTopColor: terpeneColor,
                 borderRadius: '50%',
                 animation: 'spin 1s linear infinite',
+                boxShadow: `0 0 15px ${terpeneColor}20`,
             }} />
             <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
     )
 }
+

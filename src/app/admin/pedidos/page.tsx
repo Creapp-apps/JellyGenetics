@@ -65,6 +65,11 @@ export default function AdminPedidosPage() {
                                     <td>
                                         <div>{order.customerName}</div>
                                         <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{order.customerEmail}</div>
+                                        {order.shippingAddress && (
+                                            <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4, opacity: 0.8, maxWidth: 250, overflowWrap: 'break-word' }}>
+                                                📍 {order.shippingAddress}
+                                            </div>
+                                        )}
                                     </td>
                                     <td style={{ maxWidth: 200 }}>
                                         {order.items.map((item, i) => (

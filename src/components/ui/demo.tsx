@@ -758,23 +758,7 @@ export default function JellyfishDrift({
         />
       ))}
 
-      {/* Tiny corner micro-text — design-system marks */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          top: "6.5vh",
-          left: "2.6vw",
-          zIndex: 35,
-          fontSize: "0.85vh",
-          fontWeight: 600,
-          letterSpacing: "0.22em",
-          color: isDark ? "rgba(255, 255, 255, 0.35)" : "rgba(30,30,40,0.42)",
-          textTransform: "uppercase",
-        }}
-      >
-        Concept / 01 — Living Motion
-      </div>
+
 
       {/* ── Film grain overlay ─────────────────────────────────────────────── */}
       <div

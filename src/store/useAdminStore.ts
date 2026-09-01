@@ -110,8 +110,8 @@ export interface SiteSettings {
 interface AdminState {
     // Auth
     isAuthenticated: boolean
-    login: (email: string, password: string) => boolean
-    logout: () => void
+    login: (email: string, password: string) => Promise<boolean>
+    logout: () => Promise<void>
 
     // Genetics
     genetics: Genetic[]
@@ -267,15 +267,54 @@ export const useAdminStore = create<AdminState>()(
         (set) => ({
             isAuthenticated: false,
 
-            login: (email, password) => {
+            login: async (email, password) => {
+                // 1. Try to authenticate with Supabase Auth first
+                if (supabase) {
+                    try {
+                        const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+                        if (!error && data.user) {
+                            console.log('Supabase auth login success:', data)
+                            set({ isAuthenticated: true })
+                            return true
+                        }
+                        console.warn('Supabase auth login failed:', error?.message)
+                    } catch (err: any) {
+                        console.warn('Error logging in to Supabase Auth:', err?.message || err)
+                    }
+                }
+
+                // 2. Fallback to hardcoded admin credentials (useful for offline dev or fallback auto-signup)
                 if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                    if (supabase) {
+                        try {
+                            // If they used the fallback credentials, try to auto-signUp them to Supabase
+                            const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password })
+                            if (signUpError) {
+                                console.warn('Fallback auto-signUp to Supabase failed:', signUpError.message)
+                            } else {
+                                console.log('Fallback auto-signUp to Supabase success:', signUpData)
+                            }
+                        } catch (err: any) {
+                            console.warn('Error in fallback auto-signUp:', err?.message || err)
+                        }
+                    }
                     set({ isAuthenticated: true })
                     return true
                 }
+
                 return false
             },
 
-            logout: () => set({ isAuthenticated: false }),
+            logout: async () => {
+                if (supabase) {
+                    try {
+                        await supabase.auth.signOut()
+                    } catch (err: any) {
+                        console.error('Error logging out from Supabase Auth:', err?.message || err)
+                    }
+                }
+                set({ isAuthenticated: false })
+            },
 
             // Genetics
             genetics: SAMPLE_GENETICS,
@@ -283,7 +322,7 @@ export const useAdminStore = create<AdminState>()(
                 set((s) => ({ genetics: [...s.genetics, g] }))
                 if (supabase) {
                     try {
-                        await supabase.from('genetics').insert({
+                        const { error } = await supabase.from('genetics').insert({
                             slug: g.slug,
                             name: g.name,
                             type: g.type,
@@ -303,8 +342,9 @@ export const useAdminStore = create<AdminState>()(
                             featured: g.featured,
                             soldout: g.soldout,
                         })
-                    } catch (err) {
-                        console.error('Error inserting genetic into Supabase:', err)
+                        if (error) throw error
+                    } catch (err: any) {
+                        console.error('Error inserting genetic into Supabase:', err?.message || err)
                     }
                 }
             },
@@ -334,9 +374,10 @@ export const useAdminStore = create<AdminState>()(
                         if (g.featured !== undefined) dbUpdate.featured = g.featured
                         if (g.soldout !== undefined) dbUpdate.soldout = g.soldout
 
-                        await supabase.from('genetics').update(dbUpdate).eq('id', id)
-                    } catch (err) {
-                        console.error('Error updating genetic in Supabase:', err)
+                        const { error } = await supabase.from('genetics').update(dbUpdate).eq('id', id)
+                        if (error) throw error
+                    } catch (err: any) {
+                        console.error('Error updating genetic in Supabase:', err?.message || err)
                     }
                 }
             },
@@ -344,9 +385,10 @@ export const useAdminStore = create<AdminState>()(
                 set((s) => ({ genetics: s.genetics.filter((x) => x.id !== id) }))
                 if (supabase) {
                     try {
-                        await supabase.from('genetics').delete().eq('id', id)
-                    } catch (err) {
-                        console.error('Error deleting genetic in Supabase:', err)
+                        const { error } = await supabase.from('genetics').delete().eq('id', id)
+                        if (error) throw error
+                    } catch (err: any) {
+                        console.error('Error deleting genetic in Supabase:', err?.message || err)
                     }
                 }
             },
@@ -357,7 +399,7 @@ export const useAdminStore = create<AdminState>()(
                 set((s) => ({ merch: [...s.merch, m] }))
                 if (supabase) {
                     try {
-                        await supabase.from('merch').insert({
+                        const { error } = await supabase.from('merch').insert({
                             slug: m.slug,
                             name: m.name,
                             description: m.description,
@@ -367,8 +409,9 @@ export const useAdminStore = create<AdminState>()(
                             stock: m.stock,
                             image: m.image,
                         })
-                    } catch (err) {
-                        console.error('Error adding merch to Supabase:', err)
+                        if (error) throw error
+                    } catch (err: any) {
+                        console.error('Error adding merch to Supabase:', err?.message || err)
                     }
                 }
             },
@@ -387,9 +430,10 @@ export const useAdminStore = create<AdminState>()(
                         if (m.sizes !== undefined) dbUpdate.sizes = m.sizes
                         if (m.stock !== undefined) dbUpdate.stock = m.stock
                         if (m.image !== undefined) dbUpdate.image = m.image
-                        await supabase.from('merch').update(dbUpdate).eq('id', id)
-                    } catch (err) {
-                        console.error('Error updating merch in Supabase:', err)
+                        const { error } = await supabase.from('merch').update(dbUpdate).eq('id', id)
+                        if (error) throw error
+                    } catch (err: any) {
+                        console.error('Error updating merch in Supabase:', err?.message || err)
                     }
                 }
             },
@@ -397,9 +441,10 @@ export const useAdminStore = create<AdminState>()(
                 set((s) => ({ merch: s.merch.filter((x) => x.id !== id) }))
                 if (supabase) {
                     try {
-                        await supabase.from('merch').delete().eq('id', id)
-                    } catch (err) {
-                        console.error('Error deleting merch in Supabase:', err)
+                        const { error } = await supabase.from('merch').delete().eq('id', id)
+                        if (error) throw error
+                    } catch (err: any) {
+                        console.error('Error deleting merch in Supabase:', err?.message || err)
                     }
                 }
             },
@@ -794,6 +839,24 @@ export const useAdminStore = create<AdminState>()(
             },
             fetchAll: async () => {
                 if (!supabase) return
+                try {
+                    const { data: { session } } = await supabase.auth.getSession()
+                    if (!session) {
+                        console.log('No active Supabase session, attempting auto-login using admin credentials...')
+                        const { error } = await supabase.auth.signInWithPassword({
+                            email: ADMIN_EMAIL,
+                            password: ADMIN_PASSWORD,
+                        })
+                        if (error) {
+                            console.warn('Auto-login to Supabase Auth failed:', error.message)
+                        } else {
+                            console.log('Auto-login to Supabase Auth success!')
+                        }
+                    }
+                } catch (err: any) {
+                    console.error('Error in auto-login check:', err?.message || err)
+                }
+
                 await Promise.all([
                     useAdminStore.getState().fetchSiteSettings(),
                     useAdminStore.getState().fetchGenetics(),

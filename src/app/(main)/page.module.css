@@ -14,7 +14,19 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    padding-top: var(--nav-height);
+}
+
+/* Linear gradient overlay to fade the WebGL canvas into the background color at the bottom */
+.hero::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 30vh;
+    background: linear-gradient(to bottom, transparent, var(--bg-primary));
+    z-index: 2;
+    pointer-events: none;
 }
 
 .heroJellyfish {
@@ -184,7 +196,6 @@
    =========================== */
 .featuredSection {
     position: relative;
-    border-top: 1px solid var(--glass-border);
 }
 
 /* ===========================

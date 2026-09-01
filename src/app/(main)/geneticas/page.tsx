@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { GENETICS } from '@/lib/data'
 import type { GeneticProduct } from '@/lib/data'
 import GlassJarLazy from '@/components/3D/GlassJarLazy'
+import { supabase } from '@/lib/supabaseClient'
 import styles from './page.module.css'
 
 const EASE_OUT_EXPO = [0.19, 1, 0.22, 1] as const
@@ -36,15 +37,77 @@ export default function GeneticasPage() {
     const [searchTerm, setSearchTerm] = useState('')
     const headerRef = useRef(null)
     const headerInView = useInView(headerRef, { once: true })
+    const [geneticItems, setGeneticItems] = useState<GeneticProduct[]>(GENETICS)
+
+    useEffect(() => {
+        console.log('GeneticsPage: supabase client is', supabase ? 'initialized' : 'null')
+        async function loadGenetics() {
+            if (!supabase) {
+                console.warn('GeneticsPage: supabase client is null!')
+                return
+            }
+            try {
+                const { data, error } = await supabase
+                    .from('genetics')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                console.log('GeneticsPage: supabase response data:', data, 'error:', error)
+                if (error) throw error
+                if (data && data.length > 0) {
+                    const mapped: GeneticProduct[] = data.map((x: any) => ({
+                        id: x.id,
+                        slug: x.slug,
+                        name: x.name,
+                        type: 'genetic',
+                        category: x.type as any,
+                        description: x.description || '',
+                        longDescription: x.longDescription || x.description || '',
+                        price: x.packs && x.packs.length > 0 ? Number(x.packs[0].price) : 1149,
+                        variants: x.packs ? x.packs.map((p: any) => ({ id: `${x.id}-${p.size}`, name: p.size, price: Number(p.price), stock: Number(p.stock) })) : [],
+                        thc: parseFloat(x.thc) || 0,
+                        cbd: parseFloat(x.cbd) || 0,
+                        terpenes: x.terpenes ? x.terpenes.map((t: any) => ({ name: t.name, value: Number(t.percentage || t.value || 0), color: t.color, description: t.description || '' })) : [],
+                        dominantTerpene: x.terpene || '',
+                        terpeneColor: x.terpene_color || '#00FF88',
+                        effects: x.effects || [],
+                        floweringTime: (() => {
+                            if (!x.flowering_time) return { min: 56, max: 63, unit: 'días' }
+                            const match = x.flowering_time.match(/(\d+)-(\d+)/)
+                            if (match) return { min: parseInt(match[1]), max: parseInt(match[2]), unit: 'días' }
+                            const singleMatch = x.flowering_time.match(/(\d+)/)
+                            if (singleMatch) return { min: parseInt(singleMatch[1]), max: parseInt(singleMatch[1]), unit: 'días' }
+                            return { min: 56, max: 63, unit: 'días' }
+                        })(),
+                        yield: x.yield || '450-550 g/m²',
+                        difficulty: (x.difficulty as any) || 'Medium',
+                        lineage: {
+                            mother: { name: x.lineage?.mother || 'Unknown' },
+                            father: { name: x.lineage?.father || 'Unknown' },
+                        },
+                        images: [],
+                        tag: x.seed_type || 'fem',
+                        inStock: x.packs ? x.packs.some((p: any) => Number(p.stock) > 0) : false,
+                    }))
+                    console.log('GeneticsPage: successfully mapped dynamic items:', mapped)
+                    setGeneticItems(mapped)
+                } else {
+                    console.log('GeneticsPage: no items found in database, keeping static fallback')
+                }
+            } catch (err) {
+                console.error('Error loading genetics from Supabase:', err)
+            }
+        }
+        loadGenetics()
+    }, [])
 
     const filtered = useMemo(() => {
-        return GENETICS.filter((g) => {
+        return geneticItems.filter((g) => {
             const matchesCategory = activeCategory === 'Todos' || g.category === activeCategory
             const matchesSearch = g.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 g.dominantTerpene.toLowerCase().includes(searchTerm.toLowerCase())
             return matchesCategory && matchesSearch
         })
-    }, [activeCategory, searchTerm])
+    }, [geneticItems, activeCategory, searchTerm])
 
     return (
         <div className={styles.page}>

@@ -1,12 +1,13 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import Link from 'next/link'
 import { MERCH } from '@/lib/data'
 import type { MerchProduct } from '@/lib/data'
 import { useCartStore } from '@/store/useCartStore'
 import { useUIStore } from '@/store/useUIStore'
+import { supabase } from '@/lib/supabaseClient'
 import styles from './page.module.css'
 
 const staggerContainer = {
@@ -29,6 +30,48 @@ const staggerItem = {
 export default function MerchPage() {
     const headerRef = useRef(null)
     const headerInView = useInView(headerRef, { once: true })
+    const [merchItems, setMerchItems] = useState<MerchProduct[]>(MERCH)
+
+    useEffect(() => {
+        console.log('MerchPage: supabase client is', supabase ? 'initialized' : 'null')
+        async function loadMerch() {
+            if (!supabase) {
+                console.warn('MerchPage: supabase client is null!')
+                return
+            }
+            try {
+                const { data, error } = await supabase
+                    .from('merch')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                console.log('MerchPage: supabase response data:', data, 'error:', error)
+                if (error) throw error
+                if (data && data.length > 0) {
+                    const mapped: MerchProduct[] = data.map((x: any) => ({
+                        id: x.id,
+                        slug: x.slug,
+                        name: x.name,
+                        type: 'merch',
+                        description: x.description || '',
+                        category: x.category || 'Accessories',
+                        price: Number(x.price),
+                        variants: x.sizes && x.sizes.length > 0
+                            ? x.sizes.map((s: string) => ({ id: `${x.id}-${s}`, name: s, price: Number(x.price), stock: Number(x.stock) }))
+                            : [{ id: `${x.id}-unico`, name: 'Único', price: Number(x.price), stock: Number(x.stock) }],
+                        images: x.image ? [x.image] : [],
+                        inStock: Number(x.stock) > 0,
+                    }))
+                    console.log('MerchPage: successfully mapped dynamic items:', mapped)
+                    setMerchItems(mapped)
+                } else {
+                    console.log('MerchPage: no items found in database, keeping static fallback')
+                }
+            } catch (err) {
+                console.error('Error loading merch from Supabase:', err)
+            }
+        }
+        loadMerch()
+    }, [])
 
     return (
         <div className={styles.page}>
@@ -72,7 +115,7 @@ export default function MerchPage() {
                         initial="hidden"
                         animate="visible"
                     >
-                        {MERCH.map((item) => (
+                        {merchItems.map((item) => (
                             <motion.div key={item.id} variants={staggerItem}>
                                 <MerchCard item={item} />
                             </motion.div>

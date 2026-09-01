@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState, FormEvent, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAdminStore } from '@/store/useAdminStore'
 import styles from './admin.module.css'
@@ -13,16 +13,20 @@ export default function AdminLoginPage() {
     const isAuthenticated = useAdminStore((s) => s.isAuthenticated)
     const router = useRouter()
 
-    // Already logged in → redirect
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.replace('/admin/dashboard')
+        }
+    }, [isAuthenticated, router])
+
     if (isAuthenticated) {
-        router.replace('/admin/dashboard')
         return null
     }
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         setError('')
-        const success = login(email, password)
+        const success = await login(email, password)
         if (success) {
             router.push('/admin/dashboard')
         } else {

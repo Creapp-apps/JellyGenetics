@@ -80,7 +80,7 @@ export default function CheckoutPage() {
         setLoading(true)
 
         try {
-            // Call the checkout preferences API
+            // Call the checkout preferences API (Defaults to Stripe)
             const response = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -90,16 +90,17 @@ export default function CheckoutPage() {
                     couponCode: coupon?.code || null,
                     discount: getDiscountAmount(),
                     total: getTotal(),
+                    paymentMethod: 'stripe',
                 }),
             })
 
             const data = await response.json()
 
             if (response.ok && data.initPoint) {
-                // Redirect to Mercado Pago checkout
+                // Redirect to Stripe checkout
                 window.location.href = data.initPoint
             } else {
-                alert(data.error || 'Hubo un error al iniciar el pago. Intenta nuevamente.')
+                alert(data.error || 'Hubo un error al iniciar el pago con Stripe. Intenta nuevamente.')
                 setLoading(false)
             }
         } catch (error) {
@@ -340,16 +341,16 @@ export default function CheckoutPage() {
                             ) : (
                                 <>
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '8px' }}>
-                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                        <path d="M7 11V7a5 5 0 0110 0v4" />
+                                        <rect x="2" y="5" width="20" height="14" rx="2" />
+                                        <line x1="2" y1="10" x2="22" y2="10" />
                                     </svg>
-                                    Pagar con Mercado Pago
+                                    Pagar con Tarjeta / Stripe
                                 </>
                             )}
                         </button>
 
                         <div className={styles.securityBadge}>
-                            🔒 Transacción encriptada y procesada de forma segura.
+                            🔒 Pago seguro global con <strong>Stripe</strong>. Acepta Tarjetas Internacionales, Apple Pay y Google Pay.
                         </div>
                     </motion.div>
                 </div>

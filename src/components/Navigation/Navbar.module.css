@@ -6,14 +6,11 @@
     z-index: var(--z-sticky);
     padding: var(--space-4) 0;
     transition: all var(--duration-slow) var(--ease-out-expo);
+    pointer-events: none;
 }
 
 .navbar.scrolled {
-    background: rgba(10, 10, 11, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--glass-border);
-    padding: var(--space-3) 0;
+    padding: var(--space-4) 0;
 }
 
 .navContent {
@@ -22,6 +19,24 @@
     justify-content: space-between;
     height: 48px;
 }
+
+.logo, .rightSection {
+    pointer-events: auto;
+}
+
+/* Animated Scroll Hidden state for the floating central navbar */
+.navHidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translate(-50%, -100px) !important;
+}
+
+@media (max-width: 640px) {
+    .navHidden {
+        transform: translate(-50%, 100px) !important;
+    }
+}
+
 
 /* Logo */
 .logo {

@@ -48,7 +48,7 @@ export default function CheckoutSuccessPage() {
 
                     {simulated && (
                         <div className={styles.simulationAlert}>
-                            <strong>ℹ️ Simulación Activada:</strong> Este checkout fue procesado de forma simulada porque el token de acceso de Mercado Pago no ha sido configurado en las variables de entorno (`.env.local`).
+                            <strong>ℹ️ Simulación Activada:</strong> Este checkout fue procesado de forma simulada para pruebas.
                         </div>
                     )}
 
