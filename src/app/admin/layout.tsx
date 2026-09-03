@@ -1,4 +1,5 @@
 'use client'
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -50,8 +51,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Sidebar */}
             <aside className={styles.sidebar}>
                 <div className={styles.sidebarHeader}>
-                    <span className={styles.sidebarLogo}>JELLY</span>
-                    <span className={styles.sidebarBadge}>Admin</span>
+                    <div className={styles.sidebarBrand}>
+                        <span className={styles.sidebarLogo}>
+                            JELLY <span className={styles.goldText}>GENETICS</span>
+                        </span>
+                        <span className={styles.sidebarBadge}>PORTAL ADMIN</span>
+                    </div>
                 </div>
 
                 <nav className={styles.sidebarNav}>

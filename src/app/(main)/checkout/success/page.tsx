@@ -9,7 +9,8 @@ import styles from './page.module.css'
 
 export default function CheckoutSuccessPage() {
     const searchParams = useSearchParams()
-    const orderId = searchParams.get('orderId')
+    const sessionId = searchParams.get('session_id')
+    const orderId = searchParams.get('orderId') || searchParams.get('order_id')
     const simulated = searchParams.get('simulated') === 'true'
     const clearCart = useCartStore((s) => s.clearCart)
     const [mounted, setMounted] = useState(false)
@@ -17,7 +18,16 @@ export default function CheckoutSuccessPage() {
     useEffect(() => {
         setMounted(true)
         clearCart() // Clear the shopping cart since purchase succeeded
-    }, [clearCart])
+
+        // Synchronously verify payment with Stripe to guarantee order status is updated to pagado
+        if (sessionId) {
+            fetch('/api/checkout/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sessionId, orderId }),
+            }).catch((err) => console.warn('Verification check notice:', err))
+        }
+    }, [clearCart, sessionId, orderId])
 
     if (!mounted) return null
 

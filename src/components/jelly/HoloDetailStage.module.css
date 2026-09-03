@@ -1,0 +1,365 @@
+/* ═══════════════════════════════════════════════════════════════
+   HOLO DETAIL STAGE — Grand Showcase Pedestal for Strain Detail
+   ═══════════════════════════════════════════════════════════════ */
+
+.stageContainer {
+  position: relative;
+  width: 100%;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  padding: 24px;
+  user-select: none;
+}
+
+/* Cosmic Ambient Glow Behind Pack */
+.ambientHalo {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 1;
+  animation: haloPulse 5s ease-in-out infinite alternate;
+}
+
+@keyframes haloPulse {
+  0% { transform: scale(0.9); opacity: 0.25; }
+  100% { transform: scale(1.15); opacity: 0.45; }
+}
+
+/* 3D Tilting Pack Container */
+.packWrapper {
+  position: relative;
+  width: 290px;
+  height: 380px;
+  border-radius: 20px;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 3;
+  box-shadow: 
+    0 24px 60px rgba(0, 0, 0, 0.85),
+    0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Category Foil Themes */
+.themeHybrid {
+  background: radial-gradient(circle at 50% 30%, #4a154b 0%, #1c0828 65%, #0d0414 100%);
+  border: 1.5px solid rgba(192, 38, 211, 0.5);
+}
+
+.themeIndica {
+  background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #0f172a 65%, #050814 100%);
+  border: 1.5px solid rgba(99, 102, 241, 0.5);
+}
+
+.themeSativa {
+  background: radial-gradient(circle at 50% 30%, #7c2d12 0%, #431407 65%, #180502 100%);
+  border: 1.5px solid rgba(249, 115, 22, 0.5);
+}
+
+/* Metallic Crimped Top & Bottom Seals */
+.crimpTop,
+.crimpBottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 22px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.15) 0px,
+    rgba(255, 255, 255, 0.15) 2px,
+    rgba(0, 0, 0, 0.35) 2px,
+    rgba(0, 0, 0, 0.35) 4px
+  );
+  z-index: 10;
+  pointer-events: none;
+}
+
+.crimpTop {
+  top: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.crimpBottom {
+  bottom: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* Tear Notches */
+.tearNotchLeft,
+.tearNotchRight {
+  position: absolute;
+  top: 34px;
+  width: 7px;
+  height: 12px;
+  background: #08060c;
+  z-index: 12;
+}
+
+.tearNotchLeft {
+  left: 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.tearNotchRight {
+  right: 0;
+  border-radius: 6px 0 0 6px;
+}
+
+/* Prismatic Holographic Sheen Overlay */
+.holoSheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 0, 128, 0.26) 20%,
+    rgba(0, 255, 255, 0.28) 40%,
+    rgba(255, 215, 0, 0.36) 60%,
+    rgba(0, 255, 136, 0.26) 80%,
+    transparent 100%
+  );
+  background-size: 250% 250%;
+  mix-blend-mode: color-dodge;
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 8;
+  transition: opacity 0.3s ease;
+}
+
+.stageContainer:hover .holoSheen {
+  opacity: 1;
+}
+
+/* Specular Beam */
+.specularShine {
+  position: absolute;
+  inset: -100%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 55%
+  );
+  transform: translateX(-60%);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 9;
+}
+
+.stageContainer:hover .specularShine {
+  transform: translateX(60%);
+}
+
+/* Pack Face Content */
+.packFace {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 28px 20px 22px;
+  z-index: 4;
+}
+
+/* Header */
+.packHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 5;
+}
+
+.crownBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 215, 0, 0.45);
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+.crownBadge span {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #ffd700;
+  text-transform: uppercase;
+}
+
+.editionPill {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Center Artwork */
+.packCenter {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 10px 0;
+  z-index: 5;
+}
+
+.relicOrbGlow {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  filter: blur(24px);
+  opacity: 0.6;
+  pointer-events: none;
+  animation: auraBreath 4s ease-in-out infinite alternate;
+}
+
+@keyframes auraBreath {
+  0% { transform: scale(0.85); opacity: 0.4; }
+  100% { transform: scale(1.15); opacity: 0.8; }
+}
+
+.relicEmblem {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.25) 0%, rgba(10, 6, 16, 0.85) 100%);
+  border: 2px solid rgba(255, 215, 0, 0.55);
+  box-shadow: 
+    0 10px 28px rgba(0, 0, 0, 0.85),
+    inset 0 0 16px rgba(255, 215, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.relicEmblem::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 14px;
+  width: 40px;
+  height: 18px;
+  border-radius: 50% 50% 35% 35% / 60% 60% 35% 35%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.strainTitle {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 
+    0 2px 12px rgba(0, 0, 0, 0.9),
+    0 0 24px rgba(255, 215, 0, 0.25);
+  line-height: 1.15;
+  margin: 0;
+}
+
+.strainCategory {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Footer Stats Strip */
+.packFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 14px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  z-index: 5;
+}
+
+.packStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statLabel {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+}
+
+.statVal {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.statDivider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Floating Pedestal Shadow & Halo */
+.pedestalBase {
+  position: relative;
+  width: 260px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 215, 0, 0.25) 0%, rgba(0, 0, 0, 0.8) 70%, transparent 100%);
+  filter: blur(8px);
+  margin-top: 14px;
+  z-index: 2;
+}
+
+.authenticityPill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  margin-top: 18px;
+  background: rgba(18, 12, 28, 0.65);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  border-radius: 9999px;
+  backdrop-filter: blur(12px);
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  z-index: 4;
+}
+
+.authenticityPill span {
+  color: #ffd700;
+}

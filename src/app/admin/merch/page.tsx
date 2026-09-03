@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useAdminStore, type MerchItem } from '@/store/useAdminStore'
+import { ImageUploadDropzone } from '@/components/admin/ImageUploadDropzone'
 import styles from '../admin.module.css'
 
 const CATEGORIES = ['Camisetas', 'Gorras', 'Accesorios', 'Stickers', 'Kits']
@@ -44,10 +45,19 @@ export default function AdminMerchPage() {
 
             <div className={styles.tableWrapper}>
                 <table className={styles.table}>
-                    <thead><tr><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Talles</th><th>Acciones</th></tr></thead>
+                    <thead><tr><th>Foto</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Talles</th><th>Acciones</th></tr></thead>
                     <tbody>
                         {merch.map((m) => (
                             <tr key={m.id}>
+                                <td>
+                                    <div style={{ width: 40, height: 40, borderRadius: 8, overflow: 'hidden', background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                        {m.image ? (
+                                            <img src={m.image} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        ) : (
+                                            <span style={{ fontSize: 16 }}>👕</span>
+                                        )}
+                                    </div>
+                                </td>
                                 <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{m.name}</td>
                                 <td><span className={`${styles.badge} ${styles.badgePurple}`}>{m.category}</span></td>
                                 <td>${m.price.toLocaleString()} MXN</td>
@@ -86,6 +96,14 @@ export default function AdminMerchPage() {
                             <button className={styles.modalClose} onClick={() => setModalOpen(false)}>✕</button>
                         </div>
                         <div className={styles.formGrid}>
+                            <div className={`${styles.formField} ${styles.formFieldFull}`}>
+                                <label className={styles.formLabel}>Foto del Producto</label>
+                                <ImageUploadDropzone
+                                    value={form.image}
+                                    onChange={(url) => setForm({ ...form, image: url })}
+                                    bucketName="merch"
+                                />
+                            </div>
                             <div className={styles.formField}><label className={styles.formLabel}>Nombre</label><input className={styles.formInput} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Camiseta Jelly" /></div>
                             <div className={styles.formField}>
                                 <label className={styles.formLabel}>Categoría</label>

@@ -1,0 +1,392 @@
+.vaultSection {
+  position: relative;
+  width: 100%;
+  height: 360vh; /* Scrollytelling scroll runway */
+  background-color: #08060c;
+  color: #ffffff;
+}
+
+/* Sticky viewport pinned while scrolling through runway */
+.stickyViewport {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #08060c;
+  user-select: none;
+}
+
+/* Dynamic Ambient Glow reactivo al terpeno */
+.ambientTerpeneGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(80vw, 850px);
+  height: min(80vw, 850px);
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 1;
+  transition: background-color 0.8s ease;
+}
+
+/* Deep background watermark */
+.bgWatermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-weight: 900;
+  font-size: min(18vw, 220px);
+  letter-spacing: -0.05em;
+  color: rgba(255, 255, 255, 0.02);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
+  text-transform: uppercase;
+}
+
+/* Grid & Rulers */
+.gridOverlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: center center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Top Vault Header */
+.vaultHeader {
+  position: absolute;
+  top: 36px;
+  left: 48px;
+  right: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.vaultTitleBlock {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.vaultTag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #00ff88;
+  padding: 4px 12px;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 4px;
+}
+
+.vaultMainTitle {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.counterBlock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: monospace;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.counterActive {
+  font-size: 18px;
+  font-weight: 800;
+  color: #00ff88;
+}
+
+/* Horizontal Track Wrapper */
+.horizontalTrack {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding-left: max(5vw, 60px);
+  padding-right: max(15vw, 160px);
+  z-index: 5;
+  width: max-content;
+  will-change: transform;
+}
+
+/* Strain Specimen Card */
+.strainCard {
+  position: relative;
+  width: min(85vw, 760px);
+  height: min(72vh, 520px);
+  background: rgba(16, 12, 24, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  flex-shrink: 0;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.strainCard:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Card Left Info Column */
+.cardLeft {
+  padding: 38px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+}
+
+.cardHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.specimenNumber {
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.typeBadge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  color: #f1f5f9;
+}
+
+.strainName {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: clamp(24px, 3.8vw, 38px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0 0 14px 0;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.strainDesc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 20px;
+}
+
+/* Stats Metrics Grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metricItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.metricLabel {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+.metricVal {
+  font-size: 15px;
+  font-weight: 800;
+  font-family: monospace;
+}
+
+/* Flavor Pills */
+.flavorRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.flavorPill {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* CTA Button */
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #08060c;
+  text-decoration: none;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  width: fit-content;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}
+
+/* Card Right Visual Column */
+.cardRight {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 60% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+}
+
+.budImageWrapper {
+  position: relative;
+  width: 80%;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+
+.strainImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.7));
+  transition: transform 0.4s ease;
+}
+
+.strainCard:hover .strainImage {
+  transform: scale(1.05) rotate(2deg);
+}
+
+.cardGlowDisc {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  filter: blur(45px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Bottom Progress Rail */
+.bottomRail {
+  position: absolute;
+  bottom: 28px;
+  left: 48px;
+  right: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.progressTrack {
+  position: relative;
+  width: 200px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.1s linear, background-color 0.4s ease;
+}
+
+.scrollHint {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: monospace;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .strainCard {
+    width: min(88vw, 600px);
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .cardRight {
+    height: 200px;
+    order: -1;
+  }
+  .cardLeft {
+    padding: 24px;
+  }
+  .vaultHeader {
+    left: 24px;
+    right: 24px;
+    top: 24px;
+  }
+  .bottomRail {
+    left: 24px;
+    right: 24px;
+    bottom: 20px;
+  }
+}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useAdminStore, type Order } from '@/store/useAdminStore'
+import { formatDateTime } from '@/lib/utils'
 import styles from '../admin.module.css'
 
 const STATUS_BADGE: Record<string, string> = {
@@ -84,7 +85,9 @@ export default function AdminPedidosPage() {
                                             {order.status}
                                         </span>
                                     </td>
-                                    <td style={{ color: 'var(--text-muted)' }}>{order.date}</td>
+                                    <td style={{ color: 'var(--text-muted)', whiteSpace: 'nowrap', fontSize: '12px' }}>
+                                        {formatDateTime(order.date)}
+                                    </td>
                                     <td>
                                         <div className={styles.actions}>
                                             {next && (

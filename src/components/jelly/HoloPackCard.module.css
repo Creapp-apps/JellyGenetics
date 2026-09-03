@@ -1,0 +1,263 @@
+.cardBackdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cardContainer {
+  pointer-events: auto;
+  position: relative;
+  width: min(90vw, 360px);
+  height: 520px;
+  perspective: 1000px;
+}
+
+.holoCard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #181224 0%, #0d0816 100%);
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  box-shadow: 
+    0 0 35px rgba(255, 215, 0, 0.35),
+    0 25px 60px rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+  color: #ffffff;
+  overflow: hidden;
+  user-select: none;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.2s ease;
+}
+
+.holoCard:hover {
+  box-shadow: 
+    0 0 50px rgba(255, 215, 0, 0.55),
+    0 30px 70px rgba(0, 0, 0, 0.9);
+}
+
+/* Rainbow Holo Sheen Layer */
+.holoSheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 0, 128, 0.15) 25%,
+    rgba(0, 255, 136, 0.2) 45%,
+    rgba(0, 240, 255, 0.2) 65%,
+    transparent 100%
+  );
+  background-size: 200% 200%;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.85;
+}
+
+/* Card Header */
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  z-index: 10;
+}
+
+.ratingBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ovrNumber {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 0.9;
+  color: #ffd700;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+.ovrLabel {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+}
+
+.rarityCrown {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.crownBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 9999px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #ffd700;
+  text-transform: uppercase;
+}
+
+/* Card Visual Showcase */
+.cardStage {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.strainImage {
+  max-width: 170px;
+  max-height: 170px;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.9));
+  transition: transform 0.3s ease;
+}
+
+.holoCard:hover .strainImage {
+  transform: scale(1.06) translateY(-4px);
+}
+
+.cardGlowDisc {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.35) 0%, transparent 70%);
+  filter: blur(20px);
+  z-index: -1;
+}
+
+/* Card Identity & Name */
+.cardMeta {
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.dropCategory {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: #00ff88;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.dropTitle {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+}
+
+/* FIFA / Clash Royale 6 Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 12px;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 12px;
+}
+
+.statItem {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.statVal {
+  font-family: monospace;
+  font-size: 15px;
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.statName {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Card Action Buttons */
+.cardActions {
+  display: flex;
+  gap: 10px;
+  position: relative;
+  z-index: 10;
+}
+
+.claimBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: #ffd700;
+  border: none;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #08060c;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+.claimBtn:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+}
+
+.rerollBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rerollBtn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}

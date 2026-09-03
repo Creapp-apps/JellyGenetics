@@ -1,0 +1,125 @@
+.talismanLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  pointer-events: auto;
+  outline: none;
+  user-select: none;
+}
+
+/* Standalone Circular Luxury Talisman */
+.talismanMedallion {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(32, 20, 48, 0.8) 0%, rgba(10, 6, 16, 0.94) 100%);
+  border: 1px solid rgba(255, 215, 0, 0.32);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: talismanBreathing 5s ease-in-out infinite alternate;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease;
+  overflow: hidden;
+}
+
+/* Subtle Continuous Breathing Glow */
+@keyframes talismanBreathing {
+  0% {
+    box-shadow: 
+      0 0 16px rgba(255, 215, 0, 0.16),
+      0 6px 18px rgba(0, 0, 0, 0.65),
+      inset 0 0 12px rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.28);
+  }
+  100% {
+    box-shadow: 
+      0 0 28px rgba(255, 215, 0, 0.36),
+      0 8px 24px rgba(0, 0, 0, 0.75),
+      inset 0 0 18px rgba(255, 215, 0, 0.22);
+    border-color: rgba(255, 215, 0, 0.52);
+  }
+}
+
+.talismanLink:hover .talismanMedallion {
+  transform: scale(1.08) translateY(-2px);
+  border-color: rgba(255, 215, 0, 0.7);
+  box-shadow: 
+    0 0 35px rgba(255, 215, 0, 0.5),
+    0 12px 28px rgba(0, 0, 0, 0.8),
+    inset 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+/* Specular Top Crescent on Glass (3D depth) */
+.talismanMedallion::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 10px;
+  width: 28px;
+  height: 14px;
+  border-radius: 50% 50% 35% 35% / 60% 60% 35% 35%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Crown SVG Icon */
+.crownSvg {
+  width: 28px;
+  height: 28px;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.9));
+  transition: transform 0.25s ease;
+}
+
+.talismanLink:hover .crownSvg {
+  transform: scale(1.08);
+}
+
+/* Floating Top Diamond Breathing Pulse */
+.floatingDiamond {
+  animation: diamondLevitate 2.8s ease-in-out infinite alternate;
+  transform-origin: 18px 7px;
+}
+
+@keyframes diamondLevitate {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(-2px) scale(1.1);
+  }
+}
+
+/* Subtle Slow Ambient Crown Float */
+.crownGroup {
+  animation: crownGentlePulse 4.2s ease-in-out infinite alternate;
+  transform-origin: 18px 18px;
+}
+
+@keyframes crownGentlePulse {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-0.8px);
+  }
+}
+
+/* Responsive adjustment for mobile */
+@media (max-width: 640px) {
+  .talismanMedallion {
+    width: 42px;
+    height: 42px;
+  }
+  .crownSvg {
+    width: 24px;
+    height: 24px;
+  }
+}

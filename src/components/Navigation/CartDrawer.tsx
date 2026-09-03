@@ -16,11 +16,7 @@ export default function CartDrawer() {
     const [couponCode, setCouponCode] = useState('')
     const [couponError, setCouponError] = useState('')
     const [couponSuccess, setCouponSuccess] = useState('')
-    const [mounted, setMounted] = useState(false)
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
+    const isClient = typeof window !== 'undefined'
 
     useEffect(() => {
         if (cartDrawerOpen) {
@@ -70,7 +66,7 @@ export default function CartDrawer() {
         setCouponError('')
     }
 
-    if (!mounted) return null
+    if (!isClient) return null
 
     return (
         <AnimatePresence>
@@ -95,13 +91,18 @@ export default function CartDrawer() {
                     >
                         {/* Header */}
                         <div className={styles.header}>
-                            <h3 className={styles.title}>Carrito de Compras</h3>
+                            <div className={styles.headerTitleWrap}>
+                                <span className={styles.headerBadge}>👑 MI CARRITO</span>
+                                <h3 className={styles.title}>
+                                    CARRITO DE <span className={styles.goldText}>COMPRAS</span>
+                                </h3>
+                            </div>
                             <button
                                 className={styles.closeBtn}
                                 onClick={toggleCartDrawer}
                                 aria-label="Cerrar carrito"
                             >
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                     <line x1="18" y1="6" x2="6" y2="18" />
                                     <line x1="6" y1="6" x2="18" y2="18" />
                                 </svg>
@@ -228,7 +229,7 @@ export default function CartDrawer() {
                                     )}
                                     <div className={styles.totalRow}>
                                         <span>Total</span>
-                                        <span>${getTotal().toLocaleString()}</span>
+                                        <span className={styles.totalPrice}>${getTotal().toLocaleString()} <small className={styles.currency}>MXN</small></span>
                                     </div>
                                 </div>
 
@@ -237,7 +238,10 @@ export default function CartDrawer() {
                                     className={styles.checkoutBtn}
                                     onClick={toggleCartDrawer}
                                 >
-                                    Iniciar Compresion / Pago
+                                    <span>Iniciar Compra Segura</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
                                 </Link>
                             </div>
                         )}

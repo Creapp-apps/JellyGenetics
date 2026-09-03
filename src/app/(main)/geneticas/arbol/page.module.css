@@ -1,31 +1,145 @@
+/* ═══════════════════════════════════════════════════════════════
+   GENEALOGY TREE & HALL OF FAME — Luxury Cosmic Candy Aesthetic
+   ═══════════════════════════════════════════════════════════════ */
+
 .page {
     position: relative;
     padding-top: var(--nav-height);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: transparent;
+    overflow-x: hidden;
+    z-index: 1;
+}
+
+.hallOfFameBg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: 
+      radial-gradient(circle at 50% 0%, rgba(147, 51, 234, 0.25) 0%, transparent 60%),
+      radial-gradient(circle at 15% 25%, rgba(217, 70, 239, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 85% 45%, rgba(245, 158, 11, 0.12) 0%, transparent 50%),
+      #08060c;
 }
 
 .header {
     text-align: center;
-    padding: var(--space-10) 0 var(--space-4);
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem;
     position: relative;
-    z-index: 10;
-    pointer-events: none;
+    z-index: 20;
 }
 
-/* Allow the absolutely positioned button inside to capture clicks */
-.header>* {
-    pointer-events: auto;
+.headerTitleBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.topBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #ffd700;
+    background: rgba(18, 12, 28, 0.75);
+    border: 1px solid rgba(255, 215, 0, 0.35);
+    border-radius: 9999px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.2);
 }
 
 .title {
-    font-size: var(--text-4xl);
+    font-family: var(--font-display);
+    font-size: clamp(32px, 4.5vw, 50px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0;
+    text-shadow: 0 4px 25px rgba(0, 0, 0, 0.85);
+}
+
+.goldText {
+    background: linear-gradient(135deg, #FFF2A3 0%, #FFD700 50%, #FFAE19 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.4));
 }
 
 .subtitle {
-    color: var(--text-secondary);
-    margin-top: var(--space-2);
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.backBtn {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(18, 12, 28, 0.65);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    border-radius: 9999px;
+    backdrop-filter: blur(12px);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.backBtn:hover {
+    border-color: #ffd700;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    transform: translateX(-3px);
+}
+
+.backToHallBtn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #08060c;
+    background: linear-gradient(135deg, #FFF2A3 0%, #FFD700 50%, #FFAE19 100%);
+    border: none;
+    border-radius: 9999px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.35);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.backToHallBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.55);
 }
 
 .canvasContainer {
@@ -36,131 +150,227 @@
     display: flex;
 }
 
-/* Override default ReactFlow UI to match Jelly Genetics styling */
+/* Override default ReactFlow UI */
 :global(.react-flow__controls-button) {
-    background: var(--bg-card) !important;
-    border: 1px solid var(--glass-border) !important;
-    color: var(--text-primary) !important;
-    backdrop-filter: blur(10px) !important;
+    background: rgba(18, 12, 28, 0.85) !important;
+    border: 1px solid rgba(255, 215, 0, 0.2) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(12px) !important;
 }
 
 :global(.react-flow__controls-button:hover) {
-    background: var(--glass-bg-hover) !important;
+    background: rgba(255, 215, 0, 0.2) !important;
 }
 
-/* Hide the unpolished connecting dots for a much cleaner architecture */
 :global(.react-flow__handle) {
     opacity: 0 !important;
 }
 
-/* Ensure hovered nodes (and their nested tooltips) render above all other nodes */
 :global(.react-flow__node:hover) {
     z-index: 1000 !important;
 }
 
 /* ====================================================
-   HALL OF FAME (MUSEUM GALLERY) 
+   HALL OF FAME (SHOWCASE GALLERY PEDESTALS)
    ==================================================== */
 .hallOfFame {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
-    flex-grow: 1;
-    gap: var(--space-8);
-    padding: var(--space-8);
+    flex-wrap: wrap;
+    gap: 22px;
+    padding: 2rem 2rem 5rem 2rem;
+    max-width: 1380px;
+    margin: 0 auto;
     z-index: 10;
 }
 
 .eraCard {
     cursor: pointer;
     position: relative;
-    transition: all var(--duration-normal) var(--ease-out-expo);
-    width: 320px;
-    height: 320px;
+    width: 236px;
+    min-height: 330px;
+    background: rgba(18, 12, 28, 0.75);
+    border: 1px solid rgba(255, 215, 0, 0.18);
+    border-radius: 22px;
+    padding: 20px 16px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: var(--space-4);
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
 }
 
 .eraCard:hover {
-    transform: scale(1.05) translateY(-10px);
+    transform: translateY(-8px) scale(1.02);
+    border-color: #ffd700;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+.eraCardGlow {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(20px);
+    opacity: 0.6;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.eraCard:hover .eraCardGlow {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.15);
 }
 
 .eraLogoWrapper {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2;
 }
 
 .eraLogo {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 90%;
+    max-height: 90%;
     object-fit: contain;
-    transition: transform var(--duration-slower) var(--ease-out-expo), filter var(--duration-normal);
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.1));
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.6));
 }
 
 .eraCard:hover .eraLogo {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.4));
+    transform: scale(1.08);
+}
+
+.eraCardInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    width: 100%;
+    z-index: 2;
+    margin-top: 10px;
+}
+
+.eraBadge {
+    font-family: var(--font-display);
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    border: 1px solid;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.eraCardTitle {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.eraCardDesc {
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.4;
+    margin: 0;
+    min-height: 32px;
+}
+
+.eraCta {
+    margin-top: 8px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffd700;
+    transition: all 0.2s ease;
+}
+
+.eraCard:hover .eraCta {
+    color: #ffffff;
+    text-shadow: 0 0 10px #ffd700;
 }
 
 /* ====================================================
    LORE PANEL (SPLIT SIDEBAR)
    ==================================================== */
 .loreSidebar {
-    width: 450px;
+    width: 440px;
     height: 100%;
-    background: rgba(5, 11, 26, 0.4);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border-right: 1px solid var(--glass-border);
+    background: rgba(18, 12, 28, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-right: 1px solid rgba(255, 215, 0, 0.2);
     padding: var(--space-8);
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
-    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
     color: var(--text-primary);
     overflow-y: auto;
     z-index: 20;
     flex-shrink: 0;
 }
 
+.loreBadge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #ffd700;
+    margin-bottom: 8px;
+}
+
 .lorePhoto {
     width: 100%;
-    aspect-ratio: 16/9;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--glass-border);
+    aspect-ratio: 16/10;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 215, 0, 0.25);
     object-fit: cover;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
 }
 
 .loreTitle {
-    font-size: var(--text-3xl);
+    font-size: 26px;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.06em;
     color: #ffffff;
-    margin-bottom: var(--space-4);
-    font-weight: 700;
+    margin-bottom: var(--space-3);
+    font-weight: 900;
 }
 
 .loreText {
-    font-size: var(--text-sm);
-    color: var(--text-secondary);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.75);
     line-height: 1.8;
 }
 
-/* Fix missing spaces inside the Framer Motion spans */
 .loreText span {
     display: inline;
     white-space: pre-wrap;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .canvasContainer {
         flex-direction: column;
     }
@@ -168,10 +378,9 @@
     .loreSidebar {
         width: 100%;
         height: auto;
-        max-height: 50vh;
+        max-height: 45vh;
         border-right: none;
-        border-bottom: 1px solid var(--glass-border);
-        background: rgba(5, 11, 26, 0.8);
+        border-bottom: 1px solid rgba(255, 215, 0, 0.2);
     }
 }
 
@@ -180,31 +389,35 @@
    ==================================================== */
 .customNode {
     position: relative;
-    background: rgba(5, 11, 26, 0.6);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(74, 144, 226, 0.3);
-    border-radius: 16px;
+    background: rgba(18, 12, 28, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
     color: #fff;
-    padding: 15px 25px;
-    font-weight: bold;
+    padding: 14px 22px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 13.5px;
+    letter-spacing: 0.04em;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    width: 180px;
-    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    width: 190px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
 }
 
 .customNode:hover {
-    border-color: rgba(74, 144, 226, 0.8);
-    box-shadow: 0 0 20px rgba(74, 144, 226, 0.4);
+    border-color: #ffd700;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.35);
+    transform: translateY(-2px);
 }
 
 .nodeHighlight {
-    border-color: #ffffff;
-    background: rgba(74, 144, 226, 0.15);
-    box-shadow: 0 0 40px rgba(74, 144, 226, 0.4);
+    border-color: #ffd700;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(217, 70, 239, 0.2) 100%);
+    box-shadow: 0 0 35px rgba(255, 215, 0, 0.45);
     width: 220px;
-    font-size: 1.2rem;
+    font-size: 15px;
 }
 
 .nodeTooltip {
@@ -212,15 +425,14 @@
     left: 50%;
     width: 280px;
     padding: 15px;
-    background: rgba(5, 11, 26, 0.95);
-    border: 1px solid var(--glass-border-hover);
-    border-radius: 12px;
+    background: rgba(18, 12, 28, 0.95);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 16px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-    /* expo ease */
     z-index: 100;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -252,82 +464,30 @@
     width: 100%;
     height: 120px;
     object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
 .tooltipText {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.75);
     line-height: 1.6;
     text-align: left;
     font-weight: normal;
-    /* Limit to ~256 chars visually if needed, but text will natively wrap */
 }
 
-/* Ensure edges connect cleanly through the transparent handles */
 .hiddenHandle {
     opacity: 0 !important;
     border: none !important;
     background: transparent !important;
 }
 
-/* === Pop Rosa specific logo drop shadows === */
-.popRosaLogo {
-    filter: drop-shadow(0 0 5px rgba(244, 114, 182, 0.15)) !important;
-}
-
-.eraCard:hover .popRosaLogo {
-    filter: drop-shadow(0 0 25px rgba(244, 114, 182, 0.55)) !important;
-}
-
-/* === Theme-poprosa ReactFlow Custom Node overrides === */
-:global(.theme-poprosa) .customNode {
-    border-color: rgba(244, 114, 182, 0.3);
-}
-
-:global(.theme-poprosa) .customNode:hover {
-    border-color: rgba(244, 114, 182, 0.8);
-    box-shadow: 0 0 20px rgba(244, 114, 182, 0.4);
-}
-
-:global(.theme-poprosa) .nodeHighlight {
-    border-color: #ffffff;
-    background: rgba(244, 114, 182, 0.15);
-    box-shadow: 0 0 40px rgba(244, 114, 182, 0.4);
-}
-
-/* === Ghost Kong specific logo drop shadows === */
-.ghostKongLogo {
-    filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.15)) !important;
-}
-
-.eraCard:hover .ghostKongLogo {
-    filter: drop-shadow(0 0 25px rgba(16, 185, 129, 0.55)) !important;
-}
-
-/* === Theme-ghostkong ReactFlow Custom Node overrides === */
-:global(.theme-ghostkong) .customNode {
-    border-color: rgba(16, 185, 129, 0.3);
-}
-
-:global(.theme-ghostkong) .customNode:hover {
-    border-color: rgba(16, 185, 129, 0.8);
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-}
-
-:global(.theme-ghostkong) .nodeHighlight {
-    border-color: #ffffff;
-    background: rgba(16, 185, 129, 0.15);
-    box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
-}
-
-/* === Tab Navigation Styles for Lines === */
+/* Tab Navigation for Breeding Lines */
 .tabsContainer {
     display: flex;
     justify-content: center;
-    gap: var(--space-4);
+    gap: 12px;
     position: absolute;
     top: 90px;
     left: 50%;
@@ -336,109 +496,73 @@
 }
 
 .tabButton {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    color: var(--text-secondary);
-    padding: var(--space-2) var(--space-6);
-    border-radius: var(--radius-full);
+    background: rgba(18, 12, 28, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.65);
+    padding: 8px 20px;
+    border-radius: 9999px;
     font-family: var(--font-display);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    transition: all var(--duration-normal) var(--ease-out-expo);
-    backdrop-filter: blur(10px);
+    font-size: 13px;
+    font-weight: 700;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(12px);
     cursor: pointer;
 }
 
 .tabButton:hover {
-    background: var(--glass-bg-hover);
-    border-color: var(--glass-border-hover);
-    color: var(--text-primary);
+    border-color: rgba(255, 215, 0, 0.4);
+    color: #ffffff;
 }
 
 .activeTabButton {
-    background: var(--brand-amber) !important;
-    border-color: var(--brand-amber) !important;
-    color: var(--text-primary) !important;
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+    background: linear-gradient(135deg, #FFF2A3 0%, #FFD700 50%, #FFAE19 100%) !important;
+    border-color: #ffd700 !important;
+    color: #08060c !important;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
 }
 
-/* === Theme-specific Active Tab Button overrides === */
-:global(.theme-blizzard) .activeTabButton {
-    background: #4a90e2 !important;
-    border-color: #4a90e2 !important;
-    box-shadow: 0 0 15px rgba(74, 144, 226, 0.4);
+/* Specific logos */
+.popRosaLogo {
+    filter: drop-shadow(0 0 8px rgba(244, 114, 182, 0.25)) !important;
 }
-
-:global(.theme-poprosa) .activeTabButton {
-    background: #f472b6 !important;
-    border-color: #f472b6 !important;
-    box-shadow: 0 0 15px rgba(244, 114, 182, 0.4);
+.ghostKongLogo {
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.25)) !important;
 }
-
-:global(.theme-ghostkong) .activeTabButton {
-    background: #10b981 !important;
-    border-color: #10b981 !important;
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-}
-
-:global(.theme-pandemuerto) .activeTabButton {
-    background: #ff6600 !important;
-    border-color: #ff6600 !important;
-    box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
-}
-
-/* === Pan de Muerto specific logo drop shadows === */
 .panDeMuertoLogo {
-    filter: drop-shadow(0 0 5px rgba(255, 102, 0, 0.15)) !important;
+    filter: drop-shadow(0 0 8px rgba(255, 102, 0, 0.25)) !important;
+}
+.jupiterJellyLogo {
+    filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.25)) !important;
 }
 
-.eraCard:hover .panDeMuertoLogo {
-    filter: drop-shadow(0 0 25px rgba(255, 102, 0, 0.55)) !important;
+:global(.theme-poprosa) .customNode {
+    border-color: rgba(244, 114, 182, 0.35);
+}
+:global(.theme-poprosa) .customNode:hover {
+    border-color: #f472b6;
+    box-shadow: 0 0 20px rgba(244, 114, 182, 0.4);
 }
 
-/* === Theme-pandemuerto ReactFlow Custom Node overrides === */
+:global(.theme-ghostkong) .customNode {
+    border-color: rgba(16, 185, 129, 0.35);
+}
+:global(.theme-ghostkong) .customNode:hover {
+    border-color: #10b981;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
 :global(.theme-pandemuerto) .customNode {
-    border-color: rgba(255, 102, 0, 0.3);
+    border-color: rgba(255, 102, 0, 0.35);
 }
-
 :global(.theme-pandemuerto) .customNode:hover {
-    border-color: rgba(255, 102, 0, 0.8);
+    border-color: #ff6600;
     box-shadow: 0 0 20px rgba(255, 102, 0, 0.4);
 }
 
-:global(.theme-pandemuerto) .nodeHighlight {
-    border-color: #ffffff;
-    background: rgba(255, 102, 0, 0.15);
-    box-shadow: 0 0 40px rgba(255, 102, 0, 0.4);
-}
-
-:global(.theme-jupiterjelly) .activeTabButton {
-    background: #f59e0b !important;
-    border-color: #f59e0b !important;
-    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
-}
-
-/* === Jupiter Jelly specific logo drop shadows === */
-.jupiterJellyLogo {
-    filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.15)) !important;
-}
-
-.eraCard:hover .jupiterJellyLogo {
-    filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.55)) !important;
-}
-
-/* === Theme-jupiterjelly ReactFlow Custom Node overrides === */
 :global(.theme-jupiterjelly) .customNode {
-    border-color: rgba(245, 158, 11, 0.3);
+    border-color: rgba(245, 158, 11, 0.35);
 }
-
 :global(.theme-jupiterjelly) .customNode:hover {
-    border-color: rgba(245, 158, 11, 0.8);
+    border-color: #f59e0b;
     box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
-}
-
-:global(.theme-jupiterjelly) .nodeHighlight {
-    border-color: #ffffff;
-    background: rgba(245, 158, 11, 0.15);
-    box-shadow: 0 0 40px rgba(245, 158, 11, 0.4);
 }

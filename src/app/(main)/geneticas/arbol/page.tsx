@@ -1,4 +1,5 @@
 'use client'
+/* eslint-disable react-hooks/set-state-in-effect, @next/next/no-img-element */
 
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -14,9 +15,17 @@ import SpookyHalloweenBackground from '@/components/Backgrounds/SpookyHalloweenB
 import SpaceJellyBackground from '@/components/Backgrounds/SpaceJellyBackground'
 
 // ==========================================
-// CUSTOM REACT FLOW NODE
-// ==========================================
-const CustomEraNode = ({ data }: any) => {
+interface CustomEraNodeData {
+    label: string
+    image?: string
+    description?: string
+    isHighlight?: boolean
+    isInput?: boolean
+    isOutput?: boolean
+    tooltipPos?: 'top' | 'bottom'
+}
+
+const CustomEraNode = ({ data }: { data: CustomEraNodeData }) => {
     return (
         <div className={`${styles.customNode} ${data.isHighlight ? styles.nodeHighlight : ''}`}>
 
@@ -631,6 +640,16 @@ export default function AncestryTreePage() {
         <div className={styles.page}>
             {/* DYNAMIC BACKGROUND SYSTEM */}
             <AnimatePresence>
+                {activeEra === null && (
+                    <motion.div
+                        key="hall-bg"
+                        className={styles.hallOfFameBg}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                    />
+                )}
                 {activeEra === 'BLIZZARD' && (
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -684,29 +703,34 @@ export default function AncestryTreePage() {
             </AnimatePresence>
 
             <div className={styles.header}>
-                <Link href="/geneticas" className="btn btn-outline" style={{ position: 'absolute', top: 20, left: 20, zIndex: 50 }}>
+                <Link href="/geneticas" className={styles.backBtn}>
                     ← Volver al Catálogo Oficial
                 </Link>
 
                 {activeEra !== null && (
                     <button
                         onClick={() => setActiveEra(null)}
-                        className="btn btn-ghost"
-                        style={{ position: 'absolute', top: 20, right: 20, zIndex: 50 }}
+                        className={styles.backToHallBtn}
                     >
-                        Volver al Salón de la Fama
+                        👑 Salón de la Fama
                     </button>
                 )}
 
                 <AnimatePresence mode="wait">
                     {activeEra === null ? (
-                        <motion.div key="intro" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <h1 className={styles.title}>Salón de la <span className="gradient-text">Fama</span></h1>
-                            <p className={styles.subtitle}>Selecciona un linaje histórico para adentrarte en sus raíces.</p>
+                        <motion.div key="intro" className={styles.headerTitleBox} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                            <div className={styles.topBadge}>
+                                👑 ARCHIVO GENEALÓGICO • SALÓN DE LA FAMA
+                            </div>
+                            <h1 className={styles.title}>Salón de la <span className={styles.goldText}>Fama</span></h1>
+                            <p className={styles.subtitle}>Selecciona un linaje histórico para adentrarte en sus raíces ancestrales.</p>
                         </motion.div>
                     ) : (
-                        <motion.div key="era" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <h1 className={styles.title}>Era <span className="gradient-text">{ERAS[activeEra as keyof typeof ERAS].title}</span></h1>
+                        <motion.div key="era" className={styles.headerTitleBox} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                            <div className={styles.topBadge}>
+                                🧬 ÁRBOL GENEALÓGICO INTERACTIVO
+                            </div>
+                            <h1 className={styles.title}>Era <span className={styles.goldText}>{ERAS[activeEra as keyof typeof ERAS].title}</span></h1>
                             <p className={styles.subtitle}>{ERAS[activeEra as keyof typeof ERAS].subtitle}</p>
                         </motion.div>
                     )}
@@ -722,29 +746,73 @@ export default function AncestryTreePage() {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 1.05 }}
                     >
+                        {/* 1. Blizzard */}
                         <div className={styles.eraCard} onClick={() => setActiveEra('BLIZZARD')}>
+                            <div className={styles.eraCardGlow} style={{ background: 'radial-gradient(circle, rgba(74, 144, 226, 0.45) 0%, transparent 70%)' }} />
                             <div className={styles.eraLogoWrapper}>
                                 <img src="/blizzardlogo.png" alt="Blizzard Genetics Logo" className={styles.eraLogo} />
                             </div>
+                            <div className={styles.eraCardInfo}>
+                                <span className={styles.eraBadge} style={{ color: '#4a90e2', borderColor: 'rgba(74, 144, 226, 0.35)' }}>ERA ÁRTICA</span>
+                                <h3 className={styles.eraCardTitle}>BLIZZARD</h3>
+                                <p className={styles.eraCardDesc}>Resina invernal & tricomas gélidos</p>
+                                <span className={styles.eraCta}>Explorar Linaje →</span>
+                            </div>
                         </div>
+
+                        {/* 2. P.O.P */}
                         <div className={styles.eraCard} onClick={() => setActiveEra('POPROSA')}>
+                            <div className={styles.eraCardGlow} style={{ background: 'radial-gradient(circle, rgba(244, 114, 182, 0.5) 0%, transparent 70%)' }} />
                             <div className={styles.eraLogoWrapper}>
                                 <img src="/POPROSA.png" alt="P.O.P Genetics Logo" className={`${styles.eraLogo} ${styles.popRosaLogo}`} />
                             </div>
+                            <div className={styles.eraCardInfo}>
+                                <span className={styles.eraBadge} style={{ color: '#f472b6', borderColor: 'rgba(244, 114, 182, 0.35)' }}>DULCE & ROSA</span>
+                                <h3 className={styles.eraCardTitle}>P.O.P</h3>
+                                <p className={styles.eraCardDesc}>Fusión dulce de caramelo y chicle</p>
+                                <span className={styles.eraCta}>Explorar Linaje →</span>
+                            </div>
                         </div>
+
+                        {/* 3. Ghost Kong */}
                         <div className={styles.eraCard} onClick={() => setActiveEra('GHOSTKONG')}>
+                            <div className={styles.eraCardGlow} style={{ background: 'radial-gradient(circle, rgba(16, 185, 129, 0.5) 0%, transparent 70%)' }} />
                             <div className={styles.eraLogoWrapper}>
                                 <img src="/ghostkong.png" alt="Ghost Kong Genetics Logo" className={`${styles.eraLogo} ${styles.ghostKongLogo}`} />
                             </div>
+                            <div className={styles.eraCardInfo}>
+                                <span className={styles.eraBadge} style={{ color: '#10b981', borderColor: 'rgba(16, 185, 129, 0.35)' }}>HEAVY INDICA</span>
+                                <h3 className={styles.eraCardTitle}>GHOST KONG</h3>
+                                <p className={styles.eraCardDesc}>Bestia de resina y potencia profunda</p>
+                                <span className={styles.eraCta}>Explorar Linaje →</span>
+                            </div>
                         </div>
+
+                        {/* 4. Pan de Muerto */}
                         <div className={styles.eraCard} onClick={() => setActiveEra('PANDEMUERTO')}>
+                            <div className={styles.eraCardGlow} style={{ background: 'radial-gradient(circle, rgba(255, 102, 0, 0.5) 0%, transparent 70%)' }} />
                             <div className={styles.eraLogoWrapper}>
                                 <img src="/pandemuerto.png" alt="Pan de Muerto Genetics Logo" className={`${styles.eraLogo} ${styles.panDeMuertoLogo}`} />
                             </div>
+                            <div className={styles.eraCardInfo}>
+                                <span className={styles.eraBadge} style={{ color: '#ff6600', borderColor: 'rgba(255, 102, 0, 0.35)' }}>EDICIÓN GÓTICA</span>
+                                <h3 className={styles.eraCardTitle}>PAN DE MUERTO</h3>
+                                <p className={styles.eraCardDesc}>Azahar y sombras del panteón</p>
+                                <span className={styles.eraCta}>Explorar Linaje →</span>
+                            </div>
                         </div>
+
+                        {/* 5. Jupiter Jelly */}
                         <div className={styles.eraCard} onClick={() => setActiveEra('JUPITERJELLY')}>
+                            <div className={styles.eraCardGlow} style={{ background: 'radial-gradient(circle, rgba(245, 158, 11, 0.5) 0%, transparent 70%)' }} />
                             <div className={styles.eraLogoWrapper}>
                                 <img src="/JupiterJellylogo.png" alt="Jupiter Jelly Genetics Logo" className={`${styles.eraLogo} ${styles.jupiterJellyLogo}`} />
+                            </div>
+                            <div className={styles.eraCardInfo}>
+                                <span className={styles.eraBadge} style={{ color: '#f59e0b', borderColor: 'rgba(245, 158, 11, 0.35)' }}>COSMIC HYBRID</span>
+                                <h3 className={styles.eraCardTitle}>JUPITER JELLY</h3>
+                                <p className={styles.eraCardDesc}>Tormenta cósmica de resinas estelares</p>
+                                <span className={styles.eraCta}>Explorar Linaje →</span>
                             </div>
                         </div>
                     </motion.div>
@@ -775,8 +843,9 @@ export default function AncestryTreePage() {
                                 />
 
                                 <div>
+                                    <span className={styles.loreBadge}>🌱 HISTORIA BIOLÓGICA • LINAJE OFICIAL</span>
                                     <h2 className={styles.loreTitle}>
-                                        Historia Biológica
+                                        {ERAS[activeEra as keyof typeof ERAS].title}
                                     </h2>
                                     <motion.div
                                         className={styles.loreText}

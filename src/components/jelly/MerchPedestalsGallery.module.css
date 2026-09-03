@@ -1,0 +1,451 @@
+.gallerySection {
+  position: relative;
+  width: 100%;
+  padding: 120px 0 160px;
+  background-color: #08060c;
+  color: #ffffff;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Background Atmosphere & Grid */
+.bgAtmosphere {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(90vw, 1000px);
+  height: 600px;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(0, 255, 136, 0.08) 0%,
+    rgba(192, 38, 211, 0.06) 45%,
+    transparent 70%
+  );
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gridLines {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Top Header */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 5;
+}
+
+.headerBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 54px;
+}
+
+.tagline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(0, 255, 136, 0.25);
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #00ff88;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  margin: 0 0 16px 0;
+}
+
+.gradientText {
+  background: linear-gradient(135deg, #ffffff 30%, #00ff88 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 580px;
+  margin: 0;
+}
+
+/* Category Filter Tabs */
+.filterTabsRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  position: relative;
+  padding: 10px 22px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filterBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.filterBtnActive {
+  background: rgba(0, 255, 136, 0.12);
+  border-color: #00ff88;
+  color: #00ff88;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.25);
+}
+
+/* Pedestals Grid */
+.pedestalsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+}
+
+/* 3D Magnetic Pedestal Card */
+.pedestalCard {
+  position: relative;
+  background: rgba(18, 14, 26, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s cubic-bezier(0.2, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.pedestalCard:hover {
+  border-color: rgba(0, 255, 136, 0.35);
+  box-shadow: 0 25px 60px rgba(0, 255, 136, 0.15);
+}
+
+/* Card Showcase Stage (Product Visual + Holographic Glow) */
+.showcaseStage {
+  position: relative;
+  width: 100%;
+  height: 310px;
+  background: radial-gradient(circle at 50% 60%, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.floatingProduct {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  transition: transform 0.4s ease;
+  will-change: transform;
+}
+
+.pedestalCard:hover .floatingProduct {
+  transform: translateY(-10px) scale(1.05);
+}
+
+.productImg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8));
+}
+
+/* Holographic Pedestal Platform at the bottom of the stage */
+.pedestalPlatform {
+  position: absolute;
+  bottom: 24px;
+  width: 160px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(0, 255, 136, 0.4) 0%,
+    rgba(0, 255, 136, 0.1) 50%,
+    transparent 75%
+  );
+  filter: blur(8px);
+  pointer-events: none;
+  z-index: 2;
+  transition: all 0.4s ease;
+}
+
+.pedestalCard:hover .pedestalPlatform {
+  width: 200px;
+  height: 42px;
+  background: radial-gradient(
+    ellipse,
+    rgba(0, 255, 136, 0.65) 0%,
+    rgba(0, 255, 136, 0.2) 55%,
+    transparent 80%
+  );
+  filter: blur(12px);
+}
+
+/* Badges floating on showcase */
+.badgeTopLeft {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 4;
+}
+
+.badgeTopRight {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  z-index: 4;
+}
+
+.inStockBadge {
+  background: rgba(0, 255, 136, 0.15);
+  color: #00ff88;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.soldOutBadge {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Card Body Information */
+.cardBody {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  background: rgba(14, 10, 20, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.categoryTag {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 6px;
+}
+
+.productName {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px 0;
+  color: #ffffff;
+}
+
+.productDesc {
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 20px 0;
+  min-height: 36px;
+}
+
+/* Card Footer: Price & Quick Add Button */
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.priceLabel {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+.priceValue {
+  font-family: monospace;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.priceCurrency {
+  font-size: 11px;
+  color: #00ff88;
+  margin-left: 4px;
+}
+
+/* Quick Add Button */
+.quickAddBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #00ff88;
+  border: none;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #08060c;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quickAddBtn:hover:not(:disabled) {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 255, 136, 0.4);
+}
+
+.quickAddBtn:disabled {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+}
+
+/* Added Feedback Animation */
+.addedBtn {
+  background: #ffffff !important;
+  color: #08060c !important;
+}
+
+/* Bottom Gallery Banner */
+.galleryBanner {
+  margin-top: 60px;
+  padding: 24px 32px;
+  background: rgba(18, 14, 26, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.bannerSpecs {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.bannerSpecItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.05em;
+}
+
+.bannerSpecDot {
+  width: 6px;
+  height: 6px;
+  background-color: #00ff88;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #00ff88;
+}
+
+.viewAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #00ff88;
+  text-decoration: none;
+  transition: gap 0.2s ease;
+}
+
+.viewAllLink:hover {
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .gallerySection {
+    padding: 80px 0 100px;
+  }
+  .container {
+    padding: 0 20px;
+  }
+  .pedestalsGrid {
+    grid-template-columns: 1fr;
+  }
+  .galleryBanner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

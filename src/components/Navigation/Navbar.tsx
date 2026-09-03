@@ -1,14 +1,13 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
+import { useState, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useCartStore } from '@/store/useCartStore'
 import { useUIStore } from '@/store/useUIStore'
-import { useAdminStore } from '@/store/useAdminStore'
 import { NavBar as TubelightNavBar } from '@/components/ui/tubelight-navbar'
 import { Dna, GitBranch, ShoppingBag, BookOpen, HelpCircle } from 'lucide-react'
+import JellyBrandTalisman from './JellyBrandTalisman'
 import styles from './Navbar.module.css'
 
 const navItems = [
@@ -20,19 +19,16 @@ const navItems = [
 ]
 
 export default function Navbar() {
+    const pathname = usePathname()
     const [scrolled, setScrolled] = useState(false)
     const [hidden, setHidden] = useState(false)
     const lastScrollY = useRef(0)
     const { scrollY } = useScroll()
-    const { toggleCartDrawer } = useUIStore()
+    const { toggleCartDrawer, isPortalOpen } = useUIStore()
     const itemCount = useCartStore((s) => s.getItemCount())
     
-    const { siteSettings } = useAdminStore()
-    const [mounted, setMounted] = useState(false)
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
+    const isPortalPage = pathname === '/bolsa' || pathname === '/'
+    const shouldHideForPortal = isPortalPage && !isPortalOpen
 
     useMotionValueEvent(scrollY, 'change', (latest) => {
         const direction = latest > lastScrollY.current ? 'down' : 'up'
@@ -55,20 +51,19 @@ export default function Navbar() {
                 transition={{ duration: 0.3 }}
             >
                 <div className={`container ${styles.navContent}`}>
-                    {/* Logo */}
-                    <Link href="/" className={styles.logo}>
-                        <Image
-                            src={mounted && siteSettings?.logoUrl ? siteSettings.logoUrl : "/coronajelly.png"}
-                            alt="Jelly Genetics Logo"
-                            width={44}
-                            height={44}
-                            className={styles.logoImage}
-                            priority
-                        />
-                    </Link>
+                    {/* Brand Talisman Emblem */}
+                    <JellyBrandTalisman />
 
                     {/* Right section - Cart */}
-                    <div className={styles.rightSection}>
+                    <div
+                        className={styles.rightSection}
+                        style={{
+                            opacity: shouldHideForPortal ? 0 : 1,
+                            pointerEvents: shouldHideForPortal ? 'none' : 'auto',
+                            transform: shouldHideForPortal ? 'translateY(-12px)' : 'translateY(0)',
+                            transition: 'opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
+                        }}
+                    >
                         <button
                             className={styles.cartBtn}
                             onClick={toggleCartDrawer}
@@ -97,7 +92,7 @@ export default function Navbar() {
             {/* Central Floating Tubelight Navigation Bar */}
             <TubelightNavBar 
                 items={navItems} 
-                className={hidden ? styles.navHidden : ""} 
+                className={hidden || shouldHideForPortal ? styles.navHidden : ""} 
             />
         </>
     )

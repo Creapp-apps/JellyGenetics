@@ -47,12 +47,22 @@ export async function POST(req: Request) {
                 }
 
                 if (paymentStatus === 'paid' && supabaseServer) {
-                    // Fetch current order
-                    const { data: order, error: orderError } = await supabaseServer
+                    // Fetch current order by ID or orderNumber
+                    let { data: order, error: orderError } = await supabaseServer
                         .from('orders')
                         .select('*')
                         .eq('id', orderId)
                         .maybeSingle()
+
+                    if (!order && session.metadata?.orderNumber) {
+                        const res = await supabaseServer
+                            .from('orders')
+                            .select('*')
+                            .eq('order_number', session.metadata.orderNumber)
+                            .maybeSingle()
+                        order = res.data
+                        orderError = res.error
+                    }
 
                     if (orderError || !order) {
                         console.error('Order not found in database:', orderId, orderError)
@@ -60,7 +70,7 @@ export async function POST(req: Request) {
                     }
 
                     if (order.status === 'pagado') {
-                        console.log(`Order ${orderId} was already marked as paid. Skipping redundant update.`)
+                        console.log(`Order ${order.id} was already marked as paid. Skipping redundant update.`)
                         break
                     }
 
@@ -73,7 +83,7 @@ export async function POST(req: Request) {
                             payment_method: 'stripe',
                             updated_at: new Date().toISOString(),
                         })
-                        .eq('id', orderId)
+                        .eq('id', order.id)
 
                     if (updateError) {
                         console.error('Error updating order status in Supabase:', updateError)

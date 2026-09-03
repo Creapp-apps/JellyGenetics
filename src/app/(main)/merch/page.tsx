@@ -1,14 +1,44 @@
 'use client'
+/* eslint-disable @next/next/no-img-element */
 
-import { useRef, useState, useEffect } from 'react'
-import { motion, useInView } from 'framer-motion'
-import Link from 'next/link'
+import { useRef, useState, useEffect, useMemo } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { MERCH } from '@/lib/data'
 import type { MerchProduct } from '@/lib/data'
 import { useCartStore } from '@/store/useCartStore'
 import { useUIStore } from '@/store/useUIStore'
 import { supabase } from '@/lib/supabaseClient'
 import styles from './page.module.css'
+
+interface SupabaseMerchRow {
+    id: string
+    slug: string
+    name: string
+    description?: string
+    category?: string
+    price: number | string
+    stock?: number | string
+    sizes?: string[]
+    image?: string
+}
+
+export function getMerchImage(item: MerchProduct): string {
+    if (item.images && item.images.length > 0 && (item.images[0].startsWith('/') || item.images[0].startsWith('http'))) {
+        return item.images[0]
+    }
+    const s = `${item.slug} ${item.name} ${item.category}`.toLowerCase()
+    if (s.includes('cap') || s.includes('gorra')) return '/merch/jelly-cap.jpg'
+    if (s.includes('grinder')) return '/merch/jelly-grinder.jpg'
+    if (s.includes('calceta') || s.includes('sock')) return '/merch/jelly-socks.jpg'
+    if (s.includes('led') || s.includes('corona') || s.includes('grow')) return '/merch/jelly-led.jpg'
+    return '/merch/jelly-cap.jpg'
+}
+
+const CATEGORIES = [
+    { id: 'ALL', label: 'Todos los Artículos' },
+    { id: 'Clothing', label: 'Streetwear' },
+    { id: 'Accessories', label: 'Gadgets & Accesorios' },
+] as const
 
 const staggerContainer = {
     hidden: { opacity: 0 },
@@ -19,11 +49,11 @@ const staggerContainer = {
 }
 
 const staggerItem = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 25 },
     visible: {
         opacity: 1,
         y: 0,
-        transition: { duration: 0.6, ease: [0.19, 1, 0.22, 1] as const },
+        transition: { duration: 0.5, ease: [0.19, 1, 0.22, 1] as const },
     },
 }
 
@@ -31,40 +61,50 @@ export default function MerchPage() {
     const headerRef = useRef(null)
     const headerInView = useInView(headerRef, { once: true })
     const [merchItems, setMerchItems] = useState<MerchProduct[]>(MERCH)
+    const [selectedCategory, setSelectedCategory] = useState<string>('ALL')
 
     useEffect(() => {
-        console.log('MerchPage: supabase client is', supabase ? 'initialized' : 'null')
         async function loadMerch() {
-            if (!supabase) {
-                console.warn('MerchPage: supabase client is null!')
-                return
-            }
+            if (!supabase) return
             try {
                 const { data, error } = await supabase
                     .from('merch')
                     .select('*')
                     .order('created_at', { ascending: false })
-                console.log('MerchPage: supabase response data:', data, 'error:', error)
+
                 if (error) throw error
                 if (data && data.length > 0) {
-                    const mapped: MerchProduct[] = data.map((x: any) => ({
-                        id: x.id,
-                        slug: x.slug,
-                        name: x.name,
-                        type: 'merch',
-                        description: x.description || '',
-                        category: x.category || 'Accessories',
-                        price: Number(x.price),
-                        variants: x.sizes && x.sizes.length > 0
-                            ? x.sizes.map((s: string) => ({ id: `${x.id}-${s}`, name: s, price: Number(x.price), stock: Number(x.stock) }))
-                            : [{ id: `${x.id}-unico`, name: 'Único', price: Number(x.price), stock: Number(x.stock) }],
-                        images: x.image ? [x.image] : [],
-                        inStock: Number(x.stock) > 0,
-                    }))
-                    console.log('MerchPage: successfully mapped dynamic items:', mapped)
-                    setMerchItems(mapped)
-                } else {
-                    console.log('MerchPage: no items found in database, keeping static fallback')
+                    const mapped: MerchProduct[] = (data as unknown as SupabaseMerchRow[])
+                        .filter((x) => {
+                            const str = `${x.slug} ${x.name} ${x.category || ''}`.toLowerCase()
+                            return !str.includes('led') && !str.includes('luminaria') && !str.includes('grow')
+                        })
+                        .map((x) => ({
+                            id: x.id,
+                            slug: x.slug,
+                            name: x.name,
+                            type: 'merch',
+                            description: x.description || '',
+                            category: x.category || 'Accessories',
+                            price: Number(x.price),
+                            variants: x.sizes && x.sizes.length > 0
+                                ? x.sizes.map((s) => ({ id: `${x.id}-${s}`, name: s, price: Number(x.price), stock: Number(x.stock || 10) }))
+                                : [{ id: `${x.id}-unico`, name: 'Único', price: Number(x.price), stock: Number(x.stock || 10) }],
+                            images: x.image ? [x.image] : [],
+                            inStock: Number(x.stock || 10) > 0,
+                        }))
+
+                    // Merge dynamic with curated defaults
+                    const combined = [...mapped]
+                    MERCH.forEach((fallback) => {
+                        const fbStr = `${fallback.slug} ${fallback.name} ${fallback.category}`.toLowerCase()
+                        if (!fbStr.includes('led') && !fbStr.includes('luminaria') && !fbStr.includes('grow')) {
+                            if (!combined.some((m) => m.slug === fallback.slug || m.id === fallback.id)) {
+                                combined.push(fallback)
+                            }
+                        }
+                    })
+                    setMerchItems(combined)
                 }
             } catch (err) {
                 console.error('Error loading merch from Supabase:', err)
@@ -73,40 +113,71 @@ export default function MerchPage() {
         loadMerch()
     }, [])
 
+    const filteredItems = useMemo(() => {
+        if (selectedCategory === 'ALL') return merchItems
+        return merchItems.filter((item) => {
+            const cat = item.category.toLowerCase()
+            const sel = selectedCategory.toLowerCase()
+            return cat.includes(sel) || (selectedCategory === 'Clothing' && (cat.includes('gorra') || cat.includes('cloth')))
+        })
+    }, [merchItems, selectedCategory])
+
     return (
         <div className={styles.page}>
-            {/* Hero */}
+            {/* Ambient Lighting Orbs */}
+            <div className={styles.ambientLight} />
+
+            {/* Hero Header */}
             <section className={styles.hero}>
-                <div className={styles.heroBg} />
                 <div className={`container ${styles.heroContent}`} ref={headerRef}>
-                    <motion.span
-                        className={styles.label}
+                    <motion.div
+                        className={styles.topBadge}
                         initial={{ opacity: 0, y: 20 }}
                         animate={headerInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0.15 }}
                     >
-                        STREETWEAR
-                    </motion.span>
+                        👑 COLECCIÓN OFICIAL • STREETWEAR & GADGETS
+                    </motion.div>
+
                     <motion.h1
                         className={styles.title}
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 25 }}
                         animate={headerInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.3, duration: 0.8, ease: [0.19, 1, 0.22, 1] as const }}
+                        transition={{ delay: 0.25, duration: 0.7, ease: [0.19, 1, 0.22, 1] as const }}
                     >
-                        MERCH
+                        JELLY <span className={styles.goldText}>MERCH</span>
                     </motion.h1>
+
                     <motion.p
                         className={styles.subtitle}
                         initial={{ opacity: 0, y: 20 }}
                         animate={headerInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.35 }}
                     >
-                        Cultura cannabis con estilo. Accesorios y ropa premium de Jelly Genetics.
+                        Piezas exclusivas de streetwear, accesorios coleccionables y gadgets con la identidad de diseño Jelly Genetics.
                     </motion.p>
+
+                    {/* Filter Tabs */}
+                    <motion.div
+                        className={styles.filterTabs}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={headerInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ delay: 0.45 }}
+                    >
+                        {CATEGORIES.map((cat) => (
+                            <button
+                                key={cat.id}
+                                className={`${styles.filterBtn} ${selectedCategory === cat.id ? styles.activeFilter : ''}`}
+                                onClick={() => setSelectedCategory(cat.id)}
+                            >
+                                {cat.label}
+                            </button>
+                        ))}
+                    </motion.div>
                 </div>
             </section>
 
-            {/* Grid */}
+            {/* Grid Section */}
             <section className={styles.gridSection}>
                 <div className="container">
                     <motion.div
@@ -114,12 +185,15 @@ export default function MerchPage() {
                         variants={staggerContainer}
                         initial="hidden"
                         animate="visible"
+                        key={selectedCategory}
                     >
-                        {merchItems.map((item) => (
-                            <motion.div key={item.id} variants={staggerItem}>
-                                <MerchCard item={item} />
-                            </motion.div>
-                        ))}
+                        <AnimatePresence mode="popLayout">
+                            {filteredItems.map((item) => (
+                                <motion.div key={item.id} variants={staggerItem} layout>
+                                    <MerchCard item={item} />
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
                     </motion.div>
                 </div>
             </section>
@@ -130,14 +204,12 @@ export default function MerchPage() {
 function MerchCard({ item }: { item: MerchProduct }) {
     const addItem = useCartStore((s) => s.addItem)
     const toggleCartDrawer = useUIStore((s) => s.toggleCartDrawer)
-    const variant = item.variants[0]
+    const [added, setAdded] = useState(false)
+    const variant = item.variants[0] || { id: `${item.id}-default`, name: 'Único', price: item.price, stock: 10 }
+    const imageUrl = getMerchImage(item)
 
     const handleAddToCart = () => {
         if (!variant || variant.stock <= 0) return
-        
-        let emoji = '👕'
-        if (item.category === 'Grow') emoji = '💡'
-        else if (item.category === 'Accessories') emoji = '🔧'
 
         addItem({
             id: variant.id,
@@ -145,42 +217,66 @@ function MerchCard({ item }: { item: MerchProduct }) {
             name: item.name,
             type: 'merch',
             price: item.price,
-            image: '', // Can be empty or local static route
+            image: imageUrl,
             optionSelected: variant.name,
             maxStock: variant.stock,
         }, 1)
+
+        setAdded(true)
+        setTimeout(() => setAdded(false), 1800)
         toggleCartDrawer()
     }
 
     return (
         <div className={styles.card}>
-            <div className={styles.cardImage}>
-                <div className={styles.cardImageInner}>
-                    <span className={styles.cardEmoji}>
-                        {item.category === 'Clothing' ? '👕' : item.category === 'Grow' ? '💡' : '🔧'}
+            <div className={styles.cardGlow} />
+            <div className={styles.cardImageContainer}>
+                <img
+                    src={imageUrl}
+                    alt={item.name}
+                    className={styles.productImage}
+                />
+                <span className={styles.categoryBadge}>
+                    {item.category.toUpperCase()}
+                </span>
+                {item.inStock ? (
+                    <span className={styles.stockBadge}>
+                        <span className={styles.stockDot} /> DISPONIBLE
                     </span>
-                </div>
-                {!item.inStock && <span className={styles.soldOutBadge}>Sold Out</span>}
-                <span className={styles.categoryTag}>{item.category}</span>
+                ) : (
+                    <span className={styles.soldBadge}>
+                        AGOTADO
+                    </span>
+                )}
             </div>
 
             <div className={styles.cardBody}>
-                <h3 className={styles.cardName}>{item.name}</h3>
-                <p className={styles.cardDesc}>{item.description}</p>
+                <div className={styles.cardInfo}>
+                    <h3 className={styles.cardTitle}>{item.name}</h3>
+                    <p className={styles.cardDesc}>
+                        {item.description || 'Artículo exclusivo Jelly Genetics de edición limitada.'}
+                    </p>
+                </div>
+
                 <div className={styles.cardFooter}>
-                    <span className={styles.cardPrice}>
-                        ${item.price.toLocaleString()} <small>MXN</small>
-                    </span>
+                    <div className={styles.priceBlock}>
+                        <span className={styles.priceLabel}>PRECIO</span>
+                        <span className={styles.cardPrice}>
+                            ${item.price.toLocaleString()} <small className={styles.currency}>MXN</small>
+                        </span>
+                    </div>
+
                     {item.inStock ? (
                         <button
-                            className="btn btn-primary"
-                            style={{ fontSize: '12px', padding: '8px 16px' }}
+                            className={`${styles.addBtn} ${added ? styles.addedBtn : ''}`}
                             onClick={handleAddToCart}
                         >
-                            Agregar
+                            {added ? '✓ Agregado' : 'Agregar +'}
                         </button>
                     ) : (
-                        <span className={styles.soldText}>Agotado</span>
+                        <button className={styles.disabledBtn} disabled>
+                            Agotado
+                        </button>
                     )}
                 </div>
             </div>

@@ -94,7 +94,7 @@ export default function SnowBackground() {
                 inset: 0,
                 width: '100vw',
                 height: '100vh',
-                zIndex: -1, // Keep it high enough to cover liquid ether, but below regular content (-1)
+                zIndex: 0,
                 pointerEvents: 'none'
             }}
         />

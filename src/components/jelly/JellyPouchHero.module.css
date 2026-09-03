@@ -1,0 +1,294 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 680px;
+  overflow: hidden;
+  background-color: #08060c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+}
+
+/* ===== Cinematic Parallax Background Layer ===== */
+.bgLayer {
+  position: absolute;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1);
+  filter: brightness(0.85) contrast(1.1);
+  z-index: 1;
+}
+
+/* Atmospheric Overlays */
+.vignetteOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(8, 6, 12, 0.2) 0%,
+    rgba(8, 6, 12, 0.7) 60%,
+    rgba(8, 6, 12, 0.95) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.glowAura {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(70vw, 650px);
+  height: min(70vw, 650px);
+  background: radial-gradient(
+    circle,
+    rgba(192, 38, 211, 0.15) 0%,
+    rgba(0, 255, 136, 0.08) 45%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 2;
+  animation: pulseAura 8s ease-in-out infinite alternate;
+}
+
+@keyframes pulseAura {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+}
+
+/* Seamless bottom fog dissolve */
+.bottomFogFade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 240px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(8, 6, 12, 0.4) 30%,
+    rgba(8, 6, 12, 0.82) 70%,
+    #08060c 100%
+  );
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ===== 3D Typography Orbital Ring ===== */
+.orbitalPerspective {
+  position: absolute;
+  inset: 0;
+  perspective: 2200px;
+  perspective-origin: 50% 50%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.orbitalStage {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  animation: orbitRotate 22s linear infinite;
+  will-change: transform;
+}
+
+@keyframes orbitRotate {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(-360deg); }
+}
+
+.phraseWrapper {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display, 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-weight: 900;
+  font-size: clamp(36px, 8.5vw, 84px);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.24);
+  white-space: nowrap;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  opacity: 0;
+  animation: pouchFade 22s linear infinite;
+  will-change: transform, opacity;
+  text-shadow: 0 0 35px rgba(255, 255, 255, 0.12);
+}
+
+.phraseInner {
+  display: inline-block;
+  transform: scaleX(0.92);
+  transform-origin: center;
+}
+
+/* Panoramic horizontal sweep: enters right, sweeps entire horizon, exits left, front transit hidden */
+@keyframes pouchFade {
+  0% { opacity: 0.85; }
+  12% { opacity: 0.85; }
+  22% { opacity: 0; }
+  78% { opacity: 0; }
+  88% { opacity: 0.85; }
+  100% { opacity: 0.85; }
+}
+
+/* ===== Central 3D Canvas Stage ===== */
+.canvasContainer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(80vw, 560px);
+  height: min(80vh, 600px);
+  z-index: 10;
+  cursor: grab;
+}
+
+.canvasContainer:active {
+  cursor: grabbing;
+}
+
+/* ===== Bottom Footer: Minimalist Interaction Hint & Tear Button ===== */
+.hudFooter {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.tearActionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid rgba(0, 255, 136, 0.4);
+  color: #00ff88;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 24px rgba(0, 255, 136, 0.2);
+  transition: all 0.25s ease;
+}
+
+.tearActionBtn:hover {
+  background: #00ff88;
+  color: #08060c;
+  box-shadow: 0 0 35px rgba(0, 255, 136, 0.5);
+  transform: translateY(-2px);
+}
+
+.tearActionBtnOpened {
+  background: rgba(217, 70, 239, 0.15);
+  border-color: rgba(217, 70, 239, 0.5);
+  color: #d946ef;
+  box-shadow: 0 0 24px rgba(217, 70, 239, 0.25);
+}
+
+.tearActionBtnOpened:hover {
+  background: #d946ef;
+  color: #ffffff;
+  box-shadow: 0 0 35px rgba(217, 70, 239, 0.55);
+}
+
+/* Tension Vignette overlay during Charging/Shake */
+.tensionVignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 25%, rgba(0, 0, 0, 0.8) 100%);
+  pointer-events: none;
+  z-index: 15;
+  animation: tensionPulse 0.35s ease-in-out infinite alternate;
+}
+
+@keyframes tensionPulse {
+  from { opacity: 0.55; }
+  to { opacity: 0.95; }
+}
+
+/* Flashbang burst overlay */
+.flashbangOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.95) 0%, rgba(0, 255, 136, 0.35) 50%, transparent 100%);
+  pointer-events: none;
+  z-index: 45;
+  animation: flashbangFade 0.28s ease-out forwards;
+}
+
+@keyframes flashbangFade {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Gamified button charging vibration */
+.packChargingBtn {
+  background: rgba(255, 215, 0, 0.2) !important;
+  border-color: #ffd700 !important;
+  color: #ffd700 !important;
+  box-shadow: 0 0 35px rgba(255, 215, 0, 0.5) !important;
+  animation: btnShake 0.1s linear infinite;
+  cursor: wait !important;
+}
+
+@keyframes btnShake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+  100% { transform: translate(1px, 1px); }
+}
+
+.hintText {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(14, 10, 22, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .hudFooter {
+    bottom: 18px;
+  }
+  .hintText {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+  .phraseWrapper {
+    font-size: 14vw;
+  }
+}

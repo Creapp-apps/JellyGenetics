@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useAdminStore } from '@/store/useAdminStore'
+import { formatDateTime } from '@/lib/utils'
 import styles from '../admin.module.css'
 
 const ORDER_STATUS_BADGE: Record<string, string> = {
@@ -91,7 +92,9 @@ export default function DashboardPage() {
                                         {order.status}
                                     </span>
                                 </td>
-                                <td style={{ color: 'var(--text-muted)' }}>{order.date}</td>
+                                <td style={{ color: 'var(--text-muted)', whiteSpace: 'nowrap', fontSize: '12px' }}>
+                                    {formatDateTime(order.date)}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

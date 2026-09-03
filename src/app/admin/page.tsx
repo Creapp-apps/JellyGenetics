@@ -36,15 +36,23 @@ export default function AdminLoginPage() {
 
     return (
         <div className={styles.loginPage}>
+            <div className={styles.ambientLight} />
             <div className={styles.loginCard}>
-                <h1 className={styles.loginLogo}>JELLY</h1>
-                <p className={styles.loginSubtitle}>Panel de Administración</p>
+                <div className={styles.loginBadge}>
+                    👑 PORTAL ADMINISTRATIVO
+                </div>
+                <h1 className={styles.loginLogo}>
+                    JELLY <span className={styles.goldText}>GENETICS</span>
+                </h1>
+                <p className={styles.loginSubtitle}>
+                    Gestión maestra de catálogo, pedidos y archivo biológico.
+                </p>
 
                 <form className={styles.loginForm} onSubmit={handleSubmit}>
                     {error && <div className={styles.loginError}>{error}</div>}
 
                     <div className={styles.formField}>
-                        <label className={styles.formLabel}>Email</label>
+                        <label className={styles.formLabel}>Correo Electrónico</label>
                         <input
                             type="email"
                             className={styles.formInput}
@@ -56,7 +64,7 @@ export default function AdminLoginPage() {
                     </div>
 
                     <div className={styles.formField}>
-                        <label className={styles.formLabel}>Contraseña</label>
+                        <label className={styles.formLabel}>Contraseña Maestra</label>
                         <input
                             type="password"
                             className={styles.formInput}
@@ -68,7 +76,7 @@ export default function AdminLoginPage() {
                     </div>
 
                     <button type="submit" className={styles.loginSubmit}>
-                        Ingresar
+                        Ingresar al Panel →
                     </button>
                 </form>
             </div>

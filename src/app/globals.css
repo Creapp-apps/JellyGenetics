@@ -593,6 +593,13 @@ ol {
   }
 }
 
+/* Hide global liquid ether shader when a strain or era theme is active */
+body[class*="theme-"] .global-liquid-bg {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
 /* === THEME MODS === */
 body.theme-blizzard {
   --bg-primary: #050b1a;

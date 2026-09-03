@@ -5,7 +5,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { GENETICS } from '@/lib/data'
 import type { GeneticProduct } from '@/lib/data'
-import GlassJarLazy from '@/components/3D/GlassJarLazy'
+import HoloStrainPack from '@/components/jelly/HoloStrainPack'
 import { supabase } from '@/lib/supabaseClient'
 import styles from './page.module.css'
 
@@ -47,6 +47,27 @@ export default function GeneticasPage() {
                 return
             }
             try {
+interface SupabaseGeneticRow {
+    id: string
+    slug: string
+    name: string
+    type?: 'Indica' | 'Sativa' | 'Hybrid'
+    description?: string
+    longDescription?: string
+    packs?: { size: string; price: number | string; stock: number | string }[]
+    thc?: string | number
+    cbd?: string | number
+    terpenes?: { name: string; percentage?: number | string; value?: number | string; color: string; description?: string }[]
+    terpene?: string
+    terpene_color?: string
+    effects?: string[]
+    flowering_time?: string
+    yield?: string
+    difficulty?: 'Easy' | 'Medium' | 'Advanced'
+    lineage?: { mother?: string; father?: string }
+    seed_type?: string
+}
+
                 const { data, error } = await supabase
                     .from('genetics')
                     .select('*')
@@ -54,19 +75,20 @@ export default function GeneticasPage() {
                 console.log('GeneticsPage: supabase response data:', data, 'error:', error)
                 if (error) throw error
                 if (data && data.length > 0) {
-                    const mapped: GeneticProduct[] = data.map((x: any) => ({
+                    const rows = data as unknown as SupabaseGeneticRow[]
+                    const mapped: GeneticProduct[] = rows.map((x) => ({
                         id: x.id,
                         slug: x.slug,
                         name: x.name,
                         type: 'genetic',
-                        category: x.type as any,
+                        category: x.type || 'Hybrid',
                         description: x.description || '',
                         longDescription: x.longDescription || x.description || '',
                         price: x.packs && x.packs.length > 0 ? Number(x.packs[0].price) : 1149,
-                        variants: x.packs ? x.packs.map((p: any) => ({ id: `${x.id}-${p.size}`, name: p.size, price: Number(p.price), stock: Number(p.stock) })) : [],
-                        thc: parseFloat(x.thc) || 0,
-                        cbd: parseFloat(x.cbd) || 0,
-                        terpenes: x.terpenes ? x.terpenes.map((t: any) => ({ name: t.name, value: Number(t.percentage || t.value || 0), color: t.color, description: t.description || '' })) : [],
+                        variants: x.packs ? x.packs.map((p) => ({ id: `${x.id}-${p.size}`, name: p.size, price: Number(p.price), stock: Number(p.stock) })) : [],
+                        thc: typeof x.thc === 'number' ? x.thc : parseFloat(String(x.thc || 0)) || 0,
+                        cbd: typeof x.cbd === 'number' ? x.cbd : parseFloat(String(x.cbd || 0)) || 0,
+                        terpenes: x.terpenes ? x.terpenes.map((t) => ({ name: t.name, value: Number(t.percentage || t.value || 0), color: t.color, description: t.description || '' })) : [],
                         dominantTerpene: x.terpene || '',
                         terpeneColor: x.terpene_color || '#00FF88',
                         effects: x.effects || [],
@@ -79,14 +101,14 @@ export default function GeneticasPage() {
                             return { min: 56, max: 63, unit: 'días' }
                         })(),
                         yield: x.yield || '450-550 g/m²',
-                        difficulty: (x.difficulty as any) || 'Medium',
+                        difficulty: x.difficulty || 'Medium',
                         lineage: {
                             mother: { name: x.lineage?.mother || 'Unknown' },
                             father: { name: x.lineage?.father || 'Unknown' },
                         },
                         images: [],
                         tag: x.seed_type || 'fem',
-                        inStock: x.packs ? x.packs.some((p: any) => Number(p.stock) > 0) : false,
+                        inStock: x.packs ? x.packs.some((p) => Number(p.stock) > 0) : false,
                     }))
                     console.log('GeneticsPage: successfully mapped dynamic items:', mapped)
                     setGeneticItems(mapped)
@@ -128,7 +150,7 @@ export default function GeneticasPage() {
                         animate={headerInView ? { opacity: 1, y: 0 } : {}}
                         transition={{ delay: 0.3, duration: 0.8, ease: EASE_OUT_EXPO }}
                     >
-                        Nuestras <span className="gradient-text">Genéticas</span>
+                        BÓVEDA DE <span className="gradient-text">GENÉTICAS</span>
                     </motion.h1>
                     <motion.p
                         className={styles.subtitle}
@@ -224,16 +246,10 @@ function GeneticCard({ strain }: { strain: GeneticProduct }) {
                 style={{ '--glow-color': strain.terpeneColor } as React.CSSProperties}
             />
 
-            {/* 3D Jar */}
+            {/* Holographic Collector Pack */}
             <div className={styles.cardImage}>
-                <GlassJarLazy
-                    terpeneColor={strain.terpeneColor}
-                    seedScale={0.8}
-                    cameraZ={7.5}
-                    autoRotate
-                />
+                <HoloStrainPack strain={strain} />
                 <div className={styles.cardBadges}>
-                    <span className={styles.tagBadge}>{strain.tag}</span>
                     {!strain.inStock && <span className={styles.soldOutBadge}>Sold Out</span>}
                 </div>
             </div>
@@ -247,45 +263,10 @@ function GeneticCard({ strain }: { strain: GeneticProduct }) {
                     </span>
                 </div>
 
-                <p className={styles.cardDesc}>{strain.description}</p>
-
-                {/* Stats bar */}
-                <div className={styles.statsBar}>
-                    <div className={styles.stat}>
-                        <span className={styles.statLabel}>THC</span>
-                        <span className={styles.statValue}>{strain.thc}%</span>
-                    </div>
-                    <div className={styles.statDivider} />
-                    <div className={styles.stat}>
-                        <span className={styles.statLabel}>CBD</span>
-                        <span className={styles.statValue}>{strain.cbd}%</span>
-                    </div>
-                    <div className={styles.statDivider} />
-                    <div className={styles.stat}>
-                        <span className={styles.statLabel}>Terpeno</span>
-                        <span className={styles.statValue} style={{ color: strain.terpeneColor }}>
-                            {strain.dominantTerpene}
-                        </span>
-                    </div>
-                </div>
-
-                {/* Terpene mini bars */}
-                <div className={styles.terpeneBars}>
-                    {strain.terpenes.slice(0, 3).map((t) => (
-                        <div key={t.name} className={styles.terpeneBar}>
-                            <div className={styles.terpeneBarTrack}>
-                                <motion.div
-                                    className={styles.terpeneBarFill}
-                                    style={{ background: t.color }}
-                                    initial={{ width: 0 }}
-                                    whileInView={{ width: `${t.value}%` }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 1, ease: EASE_OUT_EXPO, delay: 0.3 }}
-                                />
-                            </div>
-                            <span className={styles.terpeneBarLabel} style={{ color: t.color }}>{t.name}</span>
-                        </div>
-                    ))}
+                <div className={styles.lineageRow}>
+                    <span className={styles.lineageText}>
+                        {strain.lineage?.mother?.name || 'Jelly'} × {strain.lineage?.father?.name || 'OG'}
+                    </span>
                 </div>
 
                 {/* Footer */}
@@ -293,8 +274,8 @@ function GeneticCard({ strain }: { strain: GeneticProduct }) {
                     <span className={styles.cardPrice}>
                         ${strain.price.toLocaleString()} <small>MXN</small>
                     </span>
-                    <span className={styles.cardArrow}>
-                        Explorar →
+                    <span className={styles.cardActionBtn}>
+                        Ver Genética →
                     </span>
                 </div>
             </div>

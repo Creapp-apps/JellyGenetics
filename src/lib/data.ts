@@ -212,18 +212,6 @@ export const MERCH: MerchProduct[] = [
         images: [],
         inStock: false,
     },
-    {
-        id: 'merch-004',
-        slug: 'led-corona',
-        name: 'LED Corona',
-        type: 'merch',
-        category: 'Grow',
-        description: 'LED de alta eficiencia para cultivo indoor. Full spectrum.',
-        price: 899,
-        variants: [{ id: 'led-1', name: 'Único', price: 899, stock: 12 }],
-        images: [],
-        inStock: true,
-    },
 ]
 
 export function getGeneticBySlug(slug: string): GeneticProduct | undefined {
