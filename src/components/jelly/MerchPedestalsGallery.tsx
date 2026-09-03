@@ -67,27 +67,12 @@ export const EXHIBITION_MERCH: ExhibitionMerchItem[] = [
     stock: 25,
     accentColor: '#A855F7',
   },
-  {
-    id: 'merch-004',
-    slug: 'led-corona',
-    name: 'LED Corona Quantum Board',
-    category: 'Grow',
-    categoryLabel: 'Grow Gear',
-    description: 'Lámpara de cultivo indoor full spectrum con diodos Samsung de alta eficiencia y disipador macizo pasivo.',
-    price: 899,
-    edition: 'EDICIÓN // 04 DE 50',
-    image: '/merch/jelly-led.jpg',
-    inStock: true,
-    stock: 12,
-    accentColor: '#FFD700',
-  },
 ]
 
 const CATEGORIES = [
   { id: 'ALL', label: 'TODOS' },
   { id: 'Clothing', label: 'STREETWEAR' },
-  { id: 'Accessories', label: 'ACCESORIOS' },
-  { id: 'Grow', label: 'GROW GEAR' },
+  { id: 'Accessories', label: 'GADGETS & ACCESORIOS' },
 ]
 
 export default function MerchPedestalsGallery() {
