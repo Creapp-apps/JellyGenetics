@@ -3,8 +3,8 @@ import GeneticsVaultScrolly from '@/components/jelly/GeneticsVaultScrolly'
 import MerchPedestalsGallery from '@/components/jelly/MerchPedestalsGallery'
 
 export const metadata = {
-  title: 'Jelly Genetics — Premium Cannabis Seeds & Luxury Streetwear',
-  description: 'Genéticas de precisión botánica, archivo oficial de linajes y boutique exclusiva de streetwear y accesorios coleccionables.',
+  title: 'Jelly Genetics — Archivo Botánico & Luxury Streetwear',
+  description: 'Archivo de preservación botánica, piezas exclusivas de streetwear y gadgets de colección con la identidad de diseño Jelly Genetics.',
 }
 
 export default function HomePage() {

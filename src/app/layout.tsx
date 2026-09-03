@@ -15,16 +15,45 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Jelly Genetics — Premium Cannabis Genetics',
-  description: 'Genéticas premium de cannabis. Explora nuestro catálogo de cepas exclusivas con la más alta calidad genética.',
-  keywords: ['cannabis', 'genetics', 'seeds', 'semillas', 'feminized', 'jelly genetics'],
+  metadataBase: new URL('https://jellygenetics.com.ar'),
+  title: {
+    default: 'Jelly Genetics — Archivo Botánico & Luxury Streetwear',
+    template: '%s | Jelly Genetics',
+  },
+  description: 'Archivo de preservación botánica, piezas exclusivas de streetwear y gadgets de colección con la identidad de diseño Jelly Genetics.',
+  keywords: ['Jelly Genetics', 'archivo botánico', 'streetwear', 'coleccionables', 'gadgets', 'alta costura'],
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+  },
   openGraph: {
-    title: 'Jelly Genetics — Premium Cannabis Genetics',
-    description: 'Genéticas premium de cannabis. Cepas exclusivas con la más alta calidad genética.',
-    url: 'https://jellygenetics.com',
+    title: 'Jelly Genetics — Archivo Botánico & Luxury Streetwear',
+    description: 'Archivo de preservación botánica, piezas exclusivas de streetwear y gadgets de colección con la identidad de diseño Jelly Genetics.',
+    url: 'https://jellygenetics.com.ar',
     siteName: 'Jelly Genetics',
+    locale: 'es_AR',
     type: 'website',
-    locale: 'es_MX',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Jelly Genetics — Archivo Botánico & Luxury Streetwear',
+        type: 'image/jpeg',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Jelly Genetics — Archivo Botánico & Luxury Streetwear',
+    description: 'Archivo de preservación botánica, piezas exclusivas de streetwear y gadgets de colección.',
+    images: ['/og-image.jpg'],
   },
 }
 
