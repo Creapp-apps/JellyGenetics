@@ -9,8 +9,6 @@
   overflow: visible;
 }
 
-
-
 /* Individual Position Slot (anchored relative to center) */
 .orbSlot {
   position: absolute;
@@ -21,7 +19,7 @@
   z-index: 20;
 }
 
-/* Inner Bobbing Wrapper for Zero-Gravity Float (Does NOT conflict with slot position) */
+/* Inner Bobbing Wrapper for Zero-Gravity Float */
 .orbBobbing {
   display: flex;
   align-items: center;
@@ -31,7 +29,7 @@
   text-decoration: none;
 }
 
-/* 3D Translucent Jelly Orb */
+/* ── 3D Translucent Jelly Glass Orb (Match User Reference) ── */
 .jellyOrb {
   position: relative;
   width: 114px;
@@ -45,37 +43,37 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: 
-    0 15px 35px rgba(0, 0, 0, 0.75),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
-    inset 0 6px 14px rgba(255, 255, 255, 0.5);
-  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease;
+    0 16px 36px rgba(0, 0, 0, 0.8),
+    0 0 30px var(--orb-glow, rgba(0, 255, 136, 0.3)),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
+    inset 0 6px 14px rgba(255, 255, 255, 0.45);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease, border-color 0.28s ease;
   user-select: none;
+  overflow: hidden;
 }
 
 /* Specular High-Gloss Crescent Highlight (The 3D Gummy Shine) */
-.jellyOrb::before {
-  content: '';
+.specularShine {
   position: absolute;
-  top: 7px;
-  left: 20px;
-  width: 74px;
-  height: 38px;
+  top: 6px;
+  left: 18px;
+  width: 78px;
+  height: 40px;
   border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.1) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.08) 100%);
   pointer-events: none;
   z-index: 2;
   filter: blur(0.5px);
 }
 
 /* Secondary Bottom Rim Light */
-.jellyOrb::after {
-  content: '';
+.innerGlowCore {
   position: absolute;
   bottom: 8px;
-  width: 58px;
-  height: 16px;
+  width: 64px;
+  height: 18px;
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.3) 0%, transparent 80%);
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.35) 0%, transparent 80%);
   pointer-events: none;
   z-index: 2;
 }
@@ -86,93 +84,93 @@
 
 /* Theme Variances */
 .orbGens {
-  background: radial-gradient(circle at 35% 30%, rgba(0, 255, 136, 0.5) 0%, rgba(4, 28, 14, 0.92) 100%);
-  border: 2px solid rgba(0, 255, 136, 0.75);
+  background: radial-gradient(circle at 35% 30%, rgba(0, 255, 136, 0.52) 0%, rgba(4, 28, 14, 0.94) 100%);
+  border: 2px solid rgba(0, 255, 136, 0.8);
   box-shadow: 
     0 0 35px rgba(0, 255, 136, 0.4),
-    0 15px 35px rgba(0, 0, 0, 0.75),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
+    0 16px 36px rgba(0, 0, 0, 0.8),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
     inset 0 6px 14px rgba(255, 255, 255, 0.5);
 }
 
 .orbGens:hover {
   box-shadow: 
-    0 0 55px rgba(0, 255, 136, 0.75),
-    0 20px 40px rgba(0, 0, 0, 0.85),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
-    inset 0 8px 16px rgba(255, 255, 255, 0.7);
+    0 0 55px rgba(0, 255, 136, 0.8),
+    0 22px 45px rgba(0, 0, 0, 0.9),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
+    inset 0 8px 18px rgba(255, 255, 255, 0.7);
 }
 
 .orbGummies {
-  background: radial-gradient(circle at 35% 30%, rgba(255, 0, 128, 0.5) 0%, rgba(35, 6, 22, 0.92) 100%);
-  border: 2px solid rgba(255, 0, 128, 0.75);
+  background: radial-gradient(circle at 35% 30%, rgba(255, 0, 128, 0.52) 0%, rgba(35, 6, 22, 0.94) 100%);
+  border: 2px solid rgba(255, 0, 128, 0.8);
   box-shadow: 
     0 0 35px rgba(255, 0, 128, 0.4),
-    0 15px 35px rgba(0, 0, 0, 0.75),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
+    0 16px 36px rgba(0, 0, 0, 0.8),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
     inset 0 6px 14px rgba(255, 255, 255, 0.5);
 }
 
 .orbGummies:hover {
   box-shadow: 
-    0 0 55px rgba(255, 0, 128, 0.75),
-    0 20px 40px rgba(0, 0, 0, 0.85),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
-    inset 0 8px 16px rgba(255, 255, 255, 0.7);
+    0 0 55px rgba(255, 0, 128, 0.8),
+    0 22px 45px rgba(0, 0, 0, 0.9),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
+    inset 0 8px 18px rgba(255, 255, 255, 0.7);
 }
 
 .orbTree {
-  background: radial-gradient(circle at 35% 30%, rgba(168, 85, 247, 0.5) 0%, rgba(26, 8, 40, 0.92) 100%);
-  border: 2px solid rgba(168, 85, 247, 0.75);
+  background: radial-gradient(circle at 35% 30%, rgba(168, 85, 247, 0.52) 0%, rgba(26, 8, 40, 0.94) 100%);
+  border: 2px solid rgba(168, 85, 247, 0.8);
   box-shadow: 
     0 0 35px rgba(168, 85, 247, 0.4),
-    0 15px 35px rgba(0, 0, 0, 0.75),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
+    0 16px 36px rgba(0, 0, 0, 0.8),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
     inset 0 6px 14px rgba(255, 255, 255, 0.5);
 }
 
 .orbTree:hover {
   box-shadow: 
-    0 0 55px rgba(168, 85, 247, 0.75),
-    0 20px 40px rgba(0, 0, 0, 0.85),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
-    inset 0 8px 16px rgba(255, 255, 255, 0.7);
+    0 0 55px rgba(168, 85, 247, 0.8),
+    0 22px 45px rgba(0, 0, 0, 0.9),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
+    inset 0 8px 18px rgba(255, 255, 255, 0.7);
 }
 
 .orbMerch {
-  background: radial-gradient(circle at 35% 30%, rgba(0, 240, 255, 0.5) 0%, rgba(4, 25, 36, 0.92) 100%);
-  border: 2px solid rgba(0, 240, 255, 0.75);
+  background: radial-gradient(circle at 35% 30%, rgba(0, 240, 255, 0.52) 0%, rgba(4, 25, 36, 0.94) 100%);
+  border: 2px solid rgba(0, 240, 255, 0.8);
   box-shadow: 
     0 0 35px rgba(0, 240, 255, 0.4),
-    0 15px 35px rgba(0, 0, 0, 0.75),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
+    0 16px 36px rgba(0, 0, 0, 0.8),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
     inset 0 6px 14px rgba(255, 255, 255, 0.5);
 }
 
 .orbMerch:hover {
   box-shadow: 
-    0 0 55px rgba(0, 240, 255, 0.75),
-    0 20px 40px rgba(0, 0, 0, 0.85),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
-    inset 0 8px 16px rgba(255, 255, 255, 0.7);
+    0 0 55px rgba(0, 240, 255, 0.8),
+    0 22px 45px rgba(0, 0, 0, 0.9),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
+    inset 0 8px 18px rgba(255, 255, 255, 0.7);
 }
 
 .orbFaqs {
-  background: radial-gradient(circle at 35% 30%, rgba(255, 215, 0, 0.5) 0%, rgba(35, 25, 4, 0.92) 100%);
-  border: 2px solid rgba(255, 215, 0, 0.75);
+  background: radial-gradient(circle at 35% 30%, rgba(255, 215, 0, 0.52) 0%, rgba(35, 25, 4, 0.94) 100%);
+  border: 2px solid rgba(255, 215, 0, 0.8);
   box-shadow: 
     0 0 35px rgba(255, 215, 0, 0.4),
-    0 15px 35px rgba(0, 0, 0, 0.75),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
+    0 16px 36px rgba(0, 0, 0, 0.8),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
     inset 0 6px 14px rgba(255, 255, 255, 0.5);
 }
 
 .orbFaqs:hover {
   box-shadow: 
-    0 0 55px rgba(255, 215, 0, 0.75),
-    0 20px 40px rgba(0, 0, 0, 0.85),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.55),
-    inset 0 8px 16px rgba(255, 255, 255, 0.7);
+    0 0 55px rgba(255, 215, 0, 0.8),
+    0 22px 45px rgba(0, 0, 0, 0.9),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
+    inset 0 8px 18px rgba(255, 255, 255, 0.7);
 }
 
 /* Inner Elements */
@@ -267,7 +265,7 @@
     width: 86px;
     height: 86px;
   }
-  .jellyOrb::before {
+  .specularShine {
     top: 5px;
     left: 12px;
     width: 60px;

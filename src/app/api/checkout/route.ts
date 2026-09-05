@@ -175,7 +175,7 @@ export async function POST(req: Request) {
 
         let mpBaseUrl = baseUrl
         if (mpBaseUrl.includes('localhost') || mpBaseUrl.includes('127.0.0.1') || mpBaseUrl.startsWith('http://')) {
-            mpBaseUrl = 'https://jellygenetics.com.ar'
+            mpBaseUrl = 'https://jellygenetics.com'
         }
 
         const response = await preference.create({

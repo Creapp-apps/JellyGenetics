@@ -1,0 +1,318 @@
+.sectionWrapper {
+  position: relative;
+  padding: 110px 24px;
+  background-color: transparent;
+  color: #ffffff;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.sectionWrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(147, 51, 234, 0.14) 0%, rgba(245, 158, 11, 0.08) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 56px auto;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: #FFD700;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.goldText {
+  background: linear-gradient(135deg, #FFF2A3 0%, #FFD700 50%, #FFAE19 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.subtitle {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Showcase Card Banner ── */
+.showcaseBanner {
+  background: rgba(18, 12, 28, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 28px;
+  padding: 48px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75);
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 52px;
+  align-items: center;
+  margin-bottom: 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+.totemStage {
+  position: relative;
+  height: 440px;
+  border-radius: 20px;
+  background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.05) 0%, #050308 95%);
+  border: 1px solid rgba(255, 215, 0, 0.18);
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.85),
+    0 0 30px rgba(255, 215, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.totemImg {
+  object-fit: contain;
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.95));
+  transition: transform 0.4s ease;
+}
+
+.totemStage:hover .totemImg {
+  transform: scale(1.05) translateY(-6px);
+}
+
+.bannerInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.bannerPre {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #FFD700;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.bannerTitle {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1.15;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.bannerDesc {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 24px;
+}
+
+.specsList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.specItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.specItem svg {
+  color: #FFD700;
+  flex-shrink: 0;
+}
+
+.ctaRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.goldBtn {
+  background: linear-gradient(135deg, #FFF2A3 0%, #FFD700 50%, #FFAE19 100%);
+  color: #08060c;
+  font-weight: 900;
+  font-size: 13.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 14px 26px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.goldBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.55);
+}
+
+.secondaryBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 14px 22px;
+  border-radius: 12px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.secondaryBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── 4 Gummy Domes Row ── */
+.domesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.domeCard {
+  background: rgba(18, 12, 28, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 215, 0, 0.14);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.domeCard:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent, #FFD700);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px var(--accent-glow, rgba(255, 215, 0, 0.25));
+}
+
+.domeImgWrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.9));
+  transition: transform 0.3s ease;
+}
+
+.domeCard:hover .domeImgWrap {
+  transform: scale(1.12);
+}
+
+.domeTag {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--accent, #FFD700);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.domeName {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.domeTerpene {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 1024px) {
+  .showcaseBanner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 32px;
+  }
+  .totemStage {
+    height: 340px;
+  }
+  .domesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 28px;
+  }
+  .bannerTitle {
+    font-size: 24px;
+  }
+  .domesGrid {
+    grid-template-columns: 1fr;
+  }
+  .specsList {
+    grid-template-columns: 1fr;
+  }
+  .ctaRow {
+    flex-direction: column;
+    width: 100%;
+  }
+  .goldBtn, .secondaryBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}

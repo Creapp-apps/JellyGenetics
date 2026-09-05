@@ -2,95 +2,16 @@
 
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useAdminStore } from '@/store/useAdminStore'
+import { INITIAL_FAQS } from '@/lib/initialContent'
 import styles from './page.module.css'
 
-/* ===== FAQ Data ===== */
-const FAQ_CATEGORIES = [
-    {
-        category: 'Genéticas & Semillas',
-        icon: '🧬',
-        faqs: [
-            {
-                q: '¿Todas las semillas son feminizadas?',
-                a: 'Sí, el 100% de nuestras genéticas son feminizadas. Cada semilla ha pasado por un riguroso proceso de selección para garantizar que produzca plantas femeninas con perfiles terpénicos estables y cosechas de máxima pureza.',
-            },
-            {
-                q: '¿Cuál es la tasa de germinación garantizada?',
-                a: 'Nuestras semillas cuentan con una viabilidad superior al 99%. Las conservamos en bóvedas con control estricto de temperatura (4°C) y humedad relativa baja para preservar su energía embrionaria intacta.',
-            },
-            {
-                q: '¿Cómo seleccionan los parentales y fenotipos?',
-                a: 'Cada genética atraviesa un proceso de estabilización de múltiples generaciones (F3+ o cruces reversados controlados). Evaluamos producción de resina glandular, potencia de cannabinoides, resistencia estructural y aromas antes de lanzar una edición limitada.',
-            },
-            {
-                q: '¿Se adaptan a cultivos indoor y outdoor?',
-                a: 'Absolutamente. Todas las variedades de Jelly Genetics han sido testeadas en ambientes interiores con LED de espectro completo y en exterior bajo condiciones climáticas variables, mostrando un vigor híbrido extraordinario.',
-            },
-            {
-                q: '¿Qué documentación técnica incluye cada genética?',
-                a: 'Cada variedad incluye su linaje biológico detallado, desglose de terpenos dominantes, porcentaje orientativo de THC/CBD, semanas de floración y notas de cata de nuestros breeders.',
-            },
-        ],
-    },
-    {
-        category: 'Envíos & Entregas',
-        icon: '📦',
-        faqs: [
-            {
-                q: '¿A qué destinos realizan envíos?',
-                a: 'Realizamos envíos a toda la República Mexicana y destinos seleccionados. Próximamente habilitaremos envíos a más regiones. Los pedidos se preparan dentro de las primeras 24 horas hábiles.',
-            },
-            {
-                q: '¿Cuánto tiempo demora la entrega?',
-                a: 'Los envíos nacionales tardan entre 2 y 5 días hábiles a través de paqueterías prémium con número de guía rastreable en tiempo real enviado a tu correo o WhatsApp.',
-            },
-            {
-                q: '¿El embalaje es 100% discreto y seguro?',
-                a: 'Sí, es nuestra prioridad absoluta. Todos los envíos se despachan en cajas y sobres neutros termosellados, sin logotipos, marcas ni referencias cannábicas externas, asegurando tu privacidad.',
-            },
-            {
-                q: '¿Tienen garantía de entrega segura?',
-                a: 'Totalmente. Si ocurre cualquier extravío imputable a la paquetería, gestionamos inmediatamente el reenvío de tu pedido sin costo o el reembolso total de tu compra.',
-            },
-        ],
-    },
-    {
-        category: 'Pagos & Facturación',
-        icon: '💳',
-        faqs: [
-            {
-                q: '¿Qué formas de pago están disponibles?',
-                a: 'Aceptamos tarjetas de débito y crédito internacionales (Visa, Mastercard, AMEX), Apple Pay y Google Pay procesadas con cifrado bancario vía Stripe, además de Mercado Pago y transferencia bancaria.',
-            },
-            {
-                q: '¿Puedo comprar con tarjetas de otros países?',
-                a: 'Sí, nuestra pasarela internacional convierte de forma automática y transparente tu moneda local a la tasa bancaria del día sin comisiones ocultas.',
-            },
-            {
-                q: '¿Es seguro ingresar mis datos bancarios en el sitio?',
-                a: 'Completamente seguro. No almacenamos datos de tarjetas en nuestros servidores; todas las transacciones se tokenizan de punta a punta con estándar bancario PCI-DSS Nivel 1.',
-            },
-        ],
-    },
-    {
-        category: 'Cultivo & Soporte',
-        icon: '🌱',
-        faqs: [
-            {
-                q: '¿Ofrecen asesoramiento y soporte de cultivo?',
-                a: 'Sí. Nuestro equipo de breeders y cultivadores expertos está disponible para resolver consultas sobre germinación, nutrición, fotoperiodos y secado a través de nuestros canales oficiales.',
-            },
-            {
-                q: '¿Qué hago si tengo dudas durante la germinación?',
-                a: 'Revisá nuestra Guía Maestra en el Blog y, si tenés alguna duda específica, escribinos con fotos de tu método de germinación para orientarte paso a paso.',
-            },
-            {
-                q: '¿Dónde puedo compartir mis cosechas con la comunidad?',
-                a: 'Podés etiquetarnos en redes sociales y sumarte a la comunidad Jelly para compartir tus seguimientos, fotos de tricomas y resultados con cultivadores de todo el mundo.',
-            },
-        ],
-    },
-]
+const CATEGORY_ICONS: Record<string, string> = {
+    'Genéticas & Semillas': '🧬',
+    'Envíos & Entregas': '📦',
+    'Pagos & Facturación': '💳',
+    'Cultivo & Soporte': '🌱',
+}
 
 const EASE = [0.19, 1, 0.22, 1] as const
 
@@ -100,16 +21,33 @@ export default function FAQsPage() {
         '0-0': true, // Keep first FAQ open as showcase
     })
 
+    const storeFaqs = useAdminStore((s) => s.faqs)
+    const allFaqs = storeFaqs && storeFaqs.length > 0 ? storeFaqs : INITIAL_FAQS
+
+    const faqCategories = useMemo(() => {
+        const groups: Record<string, { q: string; a: string }[]> = {}
+        allFaqs.forEach((f) => {
+            const cat = f.category || 'General'
+            if (!groups[cat]) groups[cat] = []
+            groups[cat].push({ q: f.question, a: f.answer })
+        })
+        return Object.entries(groups).map(([category, faqs]) => ({
+            category,
+            icon: CATEGORY_ICONS[category] || '✨',
+            faqs,
+        }))
+    }, [allFaqs])
+
     const toggleItem = (key: string) => {
         setOpenItems((prev) => ({ ...prev, [key]: !prev[key] }))
     }
 
-    const categoriesList = ['Todas', ...FAQ_CATEGORIES.map((c) => c.category)]
+    const categoriesList = ['Todas', ...faqCategories.map((c) => c.category)]
 
     const displayedCategories = useMemo(() => {
-        if (selectedCategory === 'Todas') return FAQ_CATEGORIES
-        return FAQ_CATEGORIES.filter((c) => c.category === selectedCategory)
-    }, [selectedCategory])
+        if (selectedCategory === 'Todas') return faqCategories
+        return faqCategories.filter((c) => c.category === selectedCategory)
+    }, [selectedCategory, faqCategories])
 
     return (
         <div className={styles.page}>

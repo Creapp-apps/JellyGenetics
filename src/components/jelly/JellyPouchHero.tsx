@@ -43,31 +43,55 @@ export default function JellyPouchHero({
   bgImage = '/jelly/FONDO-JELLY.png',
 }: JellyPouchHeroProps) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [packState, setPackState] = useState<PackState>('IDLE')
+  const hasOpenedPack = useUIStore((s) => s.hasOpenedPack)
+  const setHasOpenedPack = useUIStore((s) => s.setHasOpenedPack)
+  const setIsPortalOpen = useUIStore((s) => s.setIsPortalOpen)
+
+  // Initialize packState directly to REVEAL if pack was already opened
+  const [packState, setPackState] = useState<PackState>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        if (localStorage.getItem('jelly_pack_opened') === 'true') return 'REVEAL'
+      } catch {}
+    }
+    return useUIStore.getState().hasOpenedPack ? 'REVEAL' : 'IDLE'
+  })
+
   const [isFlashVisible, setIsFlashVisible] = useState(false)
   const activeRiserRef = useRef<{ stop: () => void } | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  const isRevealed = packState === 'REVEAL' || hasOpenedPack
+
   const currentPhrases =
     phrases !== DEFAULT_ORBITAL_PHRASES
       ? phrases
-      : packState === 'REVEAL'
+      : isRevealed
       ? OPENED_ORBITAL_PHRASES
       : DEFAULT_ORBITAL_PHRASES
 
-  const setIsPortalOpen = useUIStore((s) => s.setIsPortalOpen)
+  // Sync state if store rehydrates
+  useEffect(() => {
+    if (hasOpenedPack && packState === 'IDLE') {
+      setPackState('REVEAL')
+    }
+  }, [hasOpenedPack, packState])
 
   // Sync portal state with global UI store to show/hide navbar and cart
   useEffect(() => {
-    setIsPortalOpen(packState === 'REVEAL')
+    if (packState === 'REVEAL' || hasOpenedPack) {
+      setIsPortalOpen(true)
+    } else {
+      setIsPortalOpen(false)
+    }
     return () => {
       setIsPortalOpen(true)
     }
-  }, [packState, setIsPortalOpen])
+  }, [packState, hasOpenedPack, setIsPortalOpen])
 
   const handleStartPackOpening = () => {
     // If already revealed, do not close or re-seal the portal
-    if (packState === 'REVEAL') {
+    if (packState === 'REVEAL' || hasOpenedPack) {
       return
     }
 
@@ -99,6 +123,11 @@ export default function JellyPouchHero({
       // 4. Legendary Card Reveal & Celestial Chime Fanfare
       setTimeout(() => {
         setPackState('REVEAL')
+        setHasOpenedPack(true)
+        setIsPortalOpen(true)
+        try {
+          localStorage.setItem('jelly_pack_opened', 'true')
+        } catch {}
         playLegendaryChime()
       }, 400)
     }, 2450)
@@ -106,7 +135,7 @@ export default function JellyPouchHero({
 
   // Lock page scrolling until pack is opened (Gateway mechanic)
   useEffect(() => {
-    if (packState !== 'REVEAL') {
+    if (packState !== 'REVEAL' && !hasOpenedPack) {
       document.body.style.overflow = 'hidden'
       document.documentElement.style.overflow = 'hidden'
     } else {
@@ -118,7 +147,7 @@ export default function JellyPouchHero({
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
     }
-  }, [packState])
+  }, [packState, hasOpenedPack])
 
   // Track mouse coordinates for background parallax
   useEffect(() => {
@@ -195,21 +224,21 @@ export default function JellyPouchHero({
           rotationSpeed={0.65}
           glowColor="#00FF88"
           scale={0.84}
-          packState={packState}
-          isOpened={packState === 'REVEAL'}
+          packState={isRevealed ? 'REVEAL' : packState}
+          isOpened={isRevealed}
           onToggleOpen={handleStartPackOpening}
         />
       </div>
 
       {/* ── 4. Floating Translucent Jelly Navigation Orbs ── */}
-      {packState === 'REVEAL' && <JellyNavOrbs />}
+      {isRevealed && <JellyNavOrbs />}
 
       {/* ── 5. Bottom Footer: Minimalist Interaction Hint ── */}
       <footer className={styles.hudFooter}>
         <div className={styles.hintText}>
           <Compass size={13} />
           <span>
-            {packState === 'REVEAL'
+            {isRevealed
               ? '✦ UNIVERSO DESBLOQUEADO • ELIGE UN DESTINO O DESLIZA ↓'
               : 'SOBRE SELLADO • CLICK EN LA BOLSA PARA DESBLOQUEAR EL UNIVERSO'}
           </span>
@@ -219,46 +248,7 @@ export default function JellyPouchHero({
   )
 }
 
-/* ══════════════════════ Skeleton Loader ══════════════════════ */
+/* ══════════════════════ Skeleton Loader (Silent Behind Preloader) ══════════════════════ */
 function PouchLoadingSkeleton() {
-  return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '16px',
-      }}
-    >
-      <div
-        style={{
-          width: '54px',
-          height: '54px',
-          borderRadius: '50%',
-          border: '3px solid rgba(255, 255, 255, 0.1)',
-          borderTopColor: '#00ff88',
-          animation: 'pouchSpin 1s linear infinite',
-        }}
-      />
-      <span
-        style={{
-          fontSize: '11px',
-          letterSpacing: '0.15em',
-          textTransform: 'uppercase',
-          color: 'rgba(255, 255, 255, 0.5)',
-          fontFamily: 'monospace',
-        }}
-      >
-        Iniciando Pouch 3D...
-      </span>
-      <style>{`
-        @keyframes pouchSpin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-    </div>
-  )
+  return <div style={{ width: '100%', height: '100%' }} />
 }

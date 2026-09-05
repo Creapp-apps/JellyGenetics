@@ -1,5 +1,6 @@
 import JellyPouchLazy from '@/components/jelly/JellyPouchLazy'
 import GeneticsVaultScrolly from '@/components/jelly/GeneticsVaultScrolly'
+import GummiesShowcaseSection from '@/components/jelly/GummiesShowcaseSection'
 import MerchPedestalsGallery from '@/components/jelly/MerchPedestalsGallery'
 
 export const metadata = {
@@ -12,6 +13,7 @@ export default function HomePage() {
     <main style={{ minHeight: '100vh', backgroundColor: '#08060c' }}>
       <JellyPouchLazy />
       <GeneticsVaultScrolly />
+      <GummiesShowcaseSection />
       <MerchPedestalsGallery />
     </main>
   )

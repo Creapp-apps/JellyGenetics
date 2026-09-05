@@ -43,7 +43,8 @@ export default function Footer() {
                     <div className={styles.linksGrid}>
                         <div className={styles.linkCol}>
                             <h4 className={styles.colTitle}>Explorar</h4>
-                            <Link href="/geneticas" className={styles.footerLink}>Genéticas</Link>
+                            <Link href="/geneticas" className={styles.footerLink}>Tienda</Link>
+                            <Link href="/arbol" className={styles.footerLink}>Genéticas</Link>
                             <Link href="/merch" className={styles.footerLink}>Merch</Link>
                             <Link href="/blog" className={styles.footerLink}>Blog</Link>
                         </div>

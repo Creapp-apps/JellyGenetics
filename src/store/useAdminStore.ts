@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { supabase } from '@/lib/supabaseClient'
+import { INITIAL_BLOG_POSTS, INITIAL_FAQS } from '@/lib/initialContent'
 
 /* ===== Types ===== */
 export interface Genetic {
@@ -51,6 +52,7 @@ export interface BlogPost {
     date: string
     readTime: string
     color: string
+    image?: string
 }
 
 export interface FAQItem {
@@ -450,7 +452,7 @@ export const useAdminStore = create<AdminState>()(
             },
 
             // Blog
-            posts: [],
+            posts: INITIAL_BLOG_POSTS,
             addPost: async (p) => {
                 set((s) => ({ posts: [...s.posts, p] }))
                 if (supabase) {
@@ -466,6 +468,7 @@ export const useAdminStore = create<AdminState>()(
                             date: p.date,
                             read_time: p.readTime,
                             color: p.color,
+                            image: p.image,
                         })
                     } catch (err) {
                         console.error('Error adding blog post to Supabase:', err)
@@ -489,6 +492,7 @@ export const useAdminStore = create<AdminState>()(
                         if (p.date !== undefined) dbUpdate.date = p.date
                         if (p.readTime !== undefined) dbUpdate.read_time = p.readTime
                         if (p.color !== undefined) dbUpdate.color = p.color
+                        if (p.image !== undefined) dbUpdate.image = p.image
                         await supabase.from('blog_posts').update(dbUpdate).eq('id', id)
                     } catch (err) {
                         console.error('Error updating blog post in Supabase:', err)
@@ -507,7 +511,7 @@ export const useAdminStore = create<AdminState>()(
             },
 
             // FAQs
-            faqs: [],
+            faqs: INITIAL_FAQS,
             addFaq: async (f) => {
                 set((s) => ({ faqs: [...s.faqs, f] }))
                 if (supabase) {
@@ -754,7 +758,7 @@ export const useAdminStore = create<AdminState>()(
                 if (!supabase) return
                 try {
                     const { data } = await supabase.from('blog_posts').select('*').order('created_at', { ascending: false })
-                    if (data) {
+                    if (data && data.length > 0) {
                         const mapped: BlogPost[] = data.map((x: any) => ({
                             id: x.id,
                             slug: x.slug,
@@ -767,6 +771,7 @@ export const useAdminStore = create<AdminState>()(
                             date: x.date,
                             readTime: x.read_time,
                             color: x.color,
+                            image: x.image,
                         }))
                         set({ posts: mapped })
                     }
@@ -778,7 +783,7 @@ export const useAdminStore = create<AdminState>()(
                 if (!supabase) return
                 try {
                     const { data } = await supabase.from('faqs').select('*').order('display_order', { ascending: true })
-                    if (data) {
+                    if (data && data.length > 0) {
                         const mapped: FAQItem[] = data.map((x: any) => ({
                             id: x.id,
                             question: x.question,
@@ -868,6 +873,18 @@ export const useAdminStore = create<AdminState>()(
                 ])
             }
         }),
-        { name: 'jelly-admin-store' }
+        {
+            name: 'jelly-admin-store',
+            onRehydrateStorage: () => (state) => {
+                if (state) {
+                    if (!state.posts || state.posts.length === 0) {
+                        state.posts = INITIAL_BLOG_POSTS
+                    }
+                    if (!state.faqs || state.faqs.length === 0) {
+                        state.faqs = INITIAL_FAQS
+                    }
+                }
+            },
+        }
     )
 )

@@ -15,7 +15,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://jellygenetics.com.ar'),
+  metadataBase: new URL('https://jellygenetics.com'),
   title: {
     default: 'Jelly Genetics — Archivo Botánico & Luxury Streetwear',
     template: '%s | Jelly Genetics',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Jelly Genetics — Archivo Botánico & Luxury Streetwear',
     description: 'Archivo de preservación botánica, piezas exclusivas de streetwear y gadgets de colección con la identidad de diseño Jelly Genetics.',
-    url: 'https://jellygenetics.com.ar',
+    url: 'https://jellygenetics.com',
     siteName: 'Jelly Genetics',
     locale: 'es_AR',
     type: 'website',

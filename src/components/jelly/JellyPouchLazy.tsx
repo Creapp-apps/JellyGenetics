@@ -11,23 +11,8 @@ const JellyPouchHero = dynamic(() => import('./JellyPouchHero'), {
         width: '100%',
         height: '100vh',
         backgroundColor: '#08060c',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
       }}
-    >
-      <div
-        style={{
-          width: '50px',
-          height: '50px',
-          border: '3px solid rgba(255,255,255,0.1)',
-          borderTopColor: '#00ff88',
-          borderRadius: '50%',
-          animation: 'spin 1s linear infinite',
-        }}
-      />
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-    </div>
+    />
   ),
 })
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAdminStore, type BlogPost } from '@/store/useAdminStore'
 import styles from '../admin.module.css'
 
@@ -10,18 +10,22 @@ const COLORS = ['#00FF88', '#FFD700', '#8B5CF6', '#FF6B35', '#3B82F6']
 const EMPTY: Omit<BlogPost, 'id'> = {
     slug: '', title: '', excerpt: '', content: '', category: 'Cultivo',
     featured: false, status: 'draft', date: new Date().toISOString().split('T')[0],
-    readTime: '5 min', color: '#00FF88',
+    readTime: '5 min', color: '#00FF88', image: '',
 }
 
 export default function AdminBlogPage() {
-    const { posts, addPost, updatePost, deletePost } = useAdminStore()
+    const { posts, addPost, updatePost, deletePost, fetchBlog } = useAdminStore()
     const [modalOpen, setModalOpen] = useState(false)
     const [editId, setEditId] = useState<string | null>(null)
     const [form, setForm] = useState(EMPTY)
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
+    useEffect(() => {
+        fetchBlog()
+    }, [fetchBlog])
+
     const openCreate = () => { setEditId(null); setForm(EMPTY); setModalOpen(true) }
-    const openEdit = (p: BlogPost) => { setEditId(p.id); setForm(p); setModalOpen(true) }
+    const openEdit = (p: BlogPost) => { setEditId(p.id); setForm({ ...EMPTY, ...p }); setModalOpen(true) }
 
     const handleSave = () => {
         if (!form.title) return
@@ -119,6 +123,10 @@ export default function AdminBlogPage() {
                                         }} />
                                     ))}
                                 </div>
+                            </div>
+                            <div className={`${styles.formField} ${styles.formFieldFull}`}>
+                                <label className={styles.formLabel}>Imagen de Portada (URL o /ruta)</label>
+                                <input className={styles.formInput} value={form.image || ''} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="/poprosabud.png o URL externa" />
                             </div>
                             <div className={`${styles.formField} ${styles.formFieldFull}`}>
                                 <label className={styles.formLabel}>Extracto</label>

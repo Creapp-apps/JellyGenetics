@@ -4,79 +4,12 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import { useAdminStore } from '@/store/useAdminStore'
+import { INITIAL_BLOG_POSTS } from '@/lib/initialContent'
 import styles from './page.module.css'
 
 /* ===== Blog Data ===== */
 const BLOG_CATEGORIES = ['Todos', 'Cultivo', 'Genéticas', 'Ciencia', 'Comunidad']
-
-const BLOG_POSTS = [
-    {
-        slug: 'guia-germinacion-perfecta',
-        title: 'Guía de Germinación Perfecta: Paso a Paso',
-        excerpt: 'Maximizá tu tasa de germinación con nuestra guía definitiva. Desde el remojo hasta el trasplante, cada detalle cuenta para asegurar un desarrollo vigoroso.',
-        category: 'Cultivo',
-        date: '2025-03-15',
-        readTime: '8 min',
-        featured: true,
-        color: '#ffd700',
-        image: '/poprosabud.png',
-    },
-    {
-        slug: 'terpenos-que-son',
-        title: '¿Qué Son los Terpenos y Por Qué Importan?',
-        excerpt: 'Los terpenos son los responsables del aroma, sabor y gran parte de los efectos de cada cepa. Descubrí cómo influyen en tu experiencia sensorial.',
-        category: 'Ciencia',
-        date: '2025-03-10',
-        readTime: '6 min',
-        featured: false,
-        color: '#f472b6',
-        image: '/ghostkongbud.png',
-    },
-    {
-        slug: 'jupiter-jelly-historia',
-        title: 'Jupiter Jelly: La Historia Detrás de Nuestra Genética Estrella',
-        excerpt: 'De un cruce experimental a la variedad insignia de Jelly. Conocé el proceso botánico de 3 años de selección fenotípica.',
-        category: 'Genéticas',
-        date: '2025-03-05',
-        readTime: '5 min',
-        featured: false,
-        color: '#f59e0b',
-        image: '/JupiterJellylogo.png',
-    },
-    {
-        slug: 'indoor-vs-outdoor',
-        title: 'Indoor vs Outdoor: ¿Cuál es Mejor para Tus Genéticas?',
-        excerpt: 'Analizamos rendimientos, potencia y perfiles de terpenos entre cultivos indoor y outdoor con nuestras cepas coleccionables.',
-        category: 'Cultivo',
-        date: '2025-02-28',
-        readTime: '10 min',
-        featured: false,
-        color: '#4a90e2',
-        image: '/fotoblizzard.png',
-    },
-    {
-        slug: 'cannabinoides-guia-completa',
-        title: 'Cannabinoides: Guía Completa de THC, CBD y Más',
-        excerpt: 'Entendé la sinergia biológica entre THC, CBD, CBG, CBN y cómo interactúan para crear el efecto séquito de máxima pureza.',
-        category: 'Ciencia',
-        date: '2025-02-20',
-        readTime: '12 min',
-        featured: false,
-        color: '#ff6600',
-        image: '/pandemuerto.png',
-    },
-    {
-        slug: 'comunidad-grow-journals',
-        title: 'Grow Journals: Tu Cultivo, Tu Historia',
-        excerpt: 'Lanzamos nuestra plataforma de diarios de cultivo. Documentá, compartí y aprendé junto a la comunidad de breeders de Jelly Genetics.',
-        category: 'Comunidad',
-        date: '2025-02-15',
-        readTime: '4 min',
-        featured: false,
-        color: '#10b981',
-        image: '/coronajelly.png',
-    },
-]
 
 const EASE = [0.19, 1, 0.22, 1] as const
 
@@ -107,13 +40,17 @@ function formatDate(dateStr: string) {
 
 export default function BlogPage() {
     const [activeCategory, setActiveCategory] = useState('Todos')
+    const storePosts = useAdminStore((s) => s.posts)
+    const allPosts = (storePosts && storePosts.length > 0 ? storePosts : INITIAL_BLOG_POSTS).filter(
+        (p) => p.status === 'published'
+    )
 
     const filteredPosts = useMemo(() => {
-        if (activeCategory === 'Todos') return BLOG_POSTS
-        return BLOG_POSTS.filter((p) => p.category === activeCategory)
-    }, [activeCategory])
+        if (activeCategory === 'Todos') return allPosts
+        return allPosts.filter((p) => p.category === activeCategory)
+    }, [activeCategory, allPosts])
 
-    const featuredPost = BLOG_POSTS.find((p) => p.featured)
+    const featuredPost = allPosts.find((p) => p.featured) || allPosts[0]
 
     return (
         <div className={styles.page}>

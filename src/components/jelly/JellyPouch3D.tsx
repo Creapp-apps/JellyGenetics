@@ -426,8 +426,8 @@ function PouchMesh({
   const velocityYRef = useRef(0)
   const dragDistanceRef = useRef(0)
 
-  // Animated progress refs
-  const openProgressRef = useRef(0)
+  // Animated progress refs (starts at 1.0 if pack is already opened to avoid jump on navigation back)
+  const openProgressRef = useRef(isOpened || packState === 'REVEAL' || packState === 'BURST' ? 1.0 : 0)
 
   const {
     frontBodyGeom,

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAdminStore, type FAQItem } from '@/store/useAdminStore'
 import styles from '../admin.module.css'
 
@@ -9,11 +9,15 @@ const CATEGORIES = ['Genéticas & Semillas', 'Envíos & Entregas', 'Pagos & Fact
 const EMPTY: Omit<FAQItem, 'id'> = { question: '', answer: '', category: CATEGORIES[0], order: 0 }
 
 export default function AdminFaqsPage() {
-    const { faqs, addFaq, updateFaq, deleteFaq } = useAdminStore()
+    const { faqs, addFaq, updateFaq, deleteFaq, fetchFaqs } = useAdminStore()
     const [modalOpen, setModalOpen] = useState(false)
     const [editId, setEditId] = useState<string | null>(null)
     const [form, setForm] = useState(EMPTY)
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
+
+    useEffect(() => {
+        fetchFaqs()
+    }, [fetchFaqs])
 
     const openCreate = () => { setEditId(null); setForm({ ...EMPTY, order: faqs.length }); setModalOpen(true) }
     const openEdit = (f: FAQItem) => { setEditId(f.id); setForm(f); setModalOpen(true) }

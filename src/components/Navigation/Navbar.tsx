@@ -6,13 +6,13 @@ import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useCartStore } from '@/store/useCartStore'
 import { useUIStore } from '@/store/useUIStore'
 import { NavBar as TubelightNavBar } from '@/components/ui/tubelight-navbar'
-import { Dna, GitBranch, ShoppingBag, BookOpen, HelpCircle } from 'lucide-react'
+import { Store, Dna, ShoppingBag, BookOpen, HelpCircle } from 'lucide-react'
 import JellyBrandTalisman from './JellyBrandTalisman'
 import styles from './Navbar.module.css'
 
 const navItems = [
-    { name: 'Genéticas', url: '/geneticas', icon: Dna },
-    { name: 'Árbol', url: '/arbol', icon: GitBranch },
+    { name: 'Tienda', url: '/geneticas', icon: Store },
+    { name: 'Genéticas', url: '/arbol', icon: Dna },
     { name: 'Merch', url: '/merch', icon: ShoppingBag },
     { name: 'Blog', url: '/blog', icon: BookOpen },
     { name: 'FAQs', url: '/faqs', icon: HelpCircle },
@@ -24,11 +24,11 @@ export default function Navbar() {
     const [hidden, setHidden] = useState(false)
     const lastScrollY = useRef(0)
     const { scrollY } = useScroll()
-    const { toggleCartDrawer, isPortalOpen } = useUIStore()
+    const { toggleCartDrawer, isPortalOpen, hasOpenedPack } = useUIStore()
     const itemCount = useCartStore((s) => s.getItemCount())
     
     const isPortalPage = pathname === '/bolsa' || pathname === '/'
-    const shouldHideForPortal = isPortalPage && !isPortalOpen
+    const shouldHideForPortal = isPortalPage && !(isPortalOpen || hasOpenedPack)
 
     useMotionValueEvent(scrollY, 'change', (latest) => {
         const direction = latest > lastScrollY.current ? 'down' : 'up'

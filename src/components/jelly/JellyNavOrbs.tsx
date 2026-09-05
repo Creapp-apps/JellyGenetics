@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Dna, Sparkles, GitBranch, ShoppingBag, HelpCircle } from 'lucide-react'
+import { Store, Dna, Sparkles, GitBranch, ShoppingBag, HelpCircle } from 'lucide-react'
 import styles from './JellyNavOrbs.module.css'
 
 interface OrbItem {
@@ -13,10 +13,10 @@ interface OrbItem {
   subtitle: string
   icon: React.ReactNode
   color: string
+  glowColor: string
   themeClass: string
   floatClass: string
   target: string
-  // Base offset relative to center pouch mouth
   x: number
   y: number
   mobileX: number
@@ -27,10 +27,11 @@ const NAV_ORBS: OrbItem[] = [
   // Lado Izquierdo
   {
     id: 'gens',
-    title: "GEN'S",
-    subtitle: 'Bóveda Élite',
-    icon: <Dna size={22} color="#00FF88" />,
+    title: 'TIENDA',
+    subtitle: 'Catálogo Élite',
+    icon: <Store size={22} color="#00FF88" />,
     color: '#00FF88',
+    glowColor: 'rgba(0, 255, 136, 0.45)',
     themeClass: styles.orbGens,
     floatClass: styles.float1,
     target: '/geneticas',
@@ -45,9 +46,10 @@ const NAV_ORBS: OrbItem[] = [
     subtitle: 'Imperial 20mg',
     icon: <Sparkles size={22} color="#FF007F" />,
     color: '#FF007F',
+    glowColor: 'rgba(255, 0, 127, 0.45)',
     themeClass: styles.orbGummies,
     floatClass: styles.float2,
-    target: '/geneticas',
+    target: '/gummies',
     x: -400,
     y: 15,
     mobileX: -150,
@@ -55,10 +57,11 @@ const NAV_ORBS: OrbItem[] = [
   },
   {
     id: 'arbol',
-    title: 'ÁRBOL',
-    subtitle: 'Genealógico',
-    icon: <GitBranch size={22} color="#A855F7" />,
+    title: 'GENÉTICAS',
+    subtitle: 'Árbol Genealógico',
+    icon: <Dna size={22} color="#A855F7" />,
     color: '#A855F7',
+    glowColor: 'rgba(168, 85, 247, 0.45)',
     themeClass: styles.orbTree,
     floatClass: styles.float3,
     target: '/arbol',
@@ -74,6 +77,7 @@ const NAV_ORBS: OrbItem[] = [
     subtitle: 'Streetwear',
     icon: <ShoppingBag size={22} color="#00F0FF" />,
     color: '#00F0FF',
+    glowColor: 'rgba(0, 240, 255, 0.45)',
     themeClass: styles.orbMerch,
     floatClass: styles.float4,
     target: '/merch',
@@ -88,6 +92,7 @@ const NAV_ORBS: OrbItem[] = [
     subtitle: 'Info & Envíos',
     icon: <HelpCircle size={22} color="#FFD700" />,
     color: '#FFD700',
+    glowColor: 'rgba(255, 215, 0, 0.45)',
     themeClass: styles.orbFaqs,
     floatClass: styles.float5,
     target: '/faqs',
@@ -99,9 +104,9 @@ const NAV_ORBS: OrbItem[] = [
 ]
 
 /**
- * Procedural synthesized water/bubble sound on hover
+ * Procedural synthesized bubble / gummy sound
  */
-function playBubblePopSound(freq = 640) {
+function playBubblePopSound(freq = 580) {
   if (typeof window === 'undefined') return
   try {
     const AudioCtx =
@@ -114,7 +119,7 @@ function playBubblePopSound(freq = 640) {
     const osc = ctx.createOscillator()
     osc.type = 'sine'
     osc.frequency.setValueAtTime(freq, now)
-    osc.frequency.exponentialRampToValueAtTime(freq * 1.8, now + 0.08)
+    osc.frequency.exponentialRampToValueAtTime(freq * 1.6, now + 0.08)
 
     const gain = ctx.createGain()
     gain.gain.setValueAtTime(0.001, now)
@@ -146,6 +151,7 @@ export default function JellyNavOrbs() {
 
   const handleOrbClick = (e: React.MouseEvent, target: string) => {
     e.stopPropagation()
+    playBubblePopSound(680)
     if (target.startsWith('#')) {
       const el = document.querySelector(target)
       if (el) {
@@ -154,13 +160,12 @@ export default function JellyNavOrbs() {
         return
       }
     }
-    // Direct page navigation
     router.push(target)
   }
 
   return (
     <div className={styles.orbsContainer}>
-      {/* ── The 5 Floating Translucent Jelly Category Orbs ── */}
+      {/* ── 5 Floating Liquid Glass Gummy Navigation Pods ── */}
       {NAV_ORBS.map((orb, index) => {
         const posX = isMobile ? orb.mobileX : orb.x
         const posY = isMobile ? orb.mobileY : orb.y
@@ -173,6 +178,8 @@ export default function JellyNavOrbs() {
               {
                 '--orb-x': `${posX}px`,
                 '--orb-y': `${posY}px`,
+                '--orb-color': orb.color,
+                '--orb-glow': orb.glowColor,
               } as React.CSSProperties
             }
           >
@@ -193,11 +200,18 @@ export default function JellyNavOrbs() {
                 onPointerDown={(e) => e.stopPropagation()}
                 onPointerUp={(e) => e.stopPropagation()}
                 onMouseEnter={() => {
-                  playBubblePopSound(580 + index * 60)
+                  playBubblePopSound(540 + index * 55)
                 }}
                 aria-label={`Navegar a ${orb.title} - ${orb.subtitle}`}
               >
                 <div className={`${styles.jellyOrb} ${orb.themeClass}`}>
+                  {/* Subtle Subsurface Light Glow */}
+                  <div className={styles.innerGlowCore} />
+
+                  {/* High-Gloss Specular Shine */}
+                  <div className={styles.specularShine} />
+
+                  {/* Icon & Label */}
                   <div className={styles.iconWrapper}>{orb.icon}</div>
                   <span className={styles.orbTitle}>{orb.title}</span>
                   <span className={styles.orbSubtitle}>{orb.subtitle}</span>

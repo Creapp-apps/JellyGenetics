@@ -27,17 +27,17 @@
     filter: blur(60px);
 }
 
-.hero {
+.hero,
+.article {
     padding: 3.5rem 1.5rem 6rem 1.5rem;
 }
 
 .containerInner {
-    max-width: 800px;
+    max-width: 840px;
     margin: 0 auto;
-    text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .backLink {
@@ -59,89 +59,165 @@
     text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
 }
 
-.topBadge {
+.metaRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.categoryBadge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 18px;
+    padding: 4px 12px;
     font-family: var(--font-display);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: #ffd700;
-    background: rgba(18, 12, 28, 0.75);
+    background: rgba(255, 215, 0, 0.12);
     border: 1px solid rgba(255, 215, 0, 0.35);
     border-radius: 9999px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 0 16px rgba(255, 215, 0, 0.18);
-    margin-bottom: 16px;
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.15);
+}
+
+.metaDot {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 12px;
+}
+
+.metaText {
+    font-family: var(--font-display);
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
 }
 
 .title {
     font-family: var(--font-display);
-    font-size: clamp(28px, 4.5vw, 46px);
+    font-size: clamp(28px, 4.5vw, 44px);
     font-weight: 900;
-    line-height: 1.25;
+    line-height: 1.22;
     color: #ffffff;
     margin: 0 0 16px 0;
     text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9);
 }
 
 .subtitle {
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.65);
-    max-width: 600px;
-    margin: 0 auto 3rem auto;
-    line-height: 1.6;
+    font-size: clamp(16px, 1.8vw, 18px);
+    color: rgba(255, 255, 255, 0.72);
+    margin: 0 0 2.5rem 0;
+    line-height: 1.65;
+    max-width: 780px;
 }
 
-.previewCard {
+.coverWrapper {
     position: relative;
     width: 100%;
-    padding: 3.5rem 2.5rem;
-    background: rgba(18, 12, 28, 0.8);
-    border: 1px solid rgba(255, 215, 0, 0.25);
-    border-radius: 28px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    height: 420px;
+    border-radius: 24px;
     overflow: hidden;
+    margin-bottom: 3.5rem;
+    border: 1px solid rgba(255, 215, 0, 0.22);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 215, 0, 0.1);
+}
+
+.coverImage {
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.coverOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgba(8, 6, 12, 0.85) 100%);
+    pointer-events: none;
+}
+
+/* Content Body */
+.contentBody {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 16px;
+    gap: 1.25rem;
+    margin-bottom: 4rem;
 }
 
-.previewGlow {
-    position: absolute;
-    top: -30%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 350px;
-    height: 250px;
-    background: radial-gradient(circle, rgba(217, 70, 239, 0.2) 0%, transparent 70%);
-    pointer-events: none;
-    filter: blur(50px);
+.contentH2 {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.5vw, 28px);
+    font-weight: 800;
+    color: #ffffff;
+    margin: 2rem 0 0.5rem 0;
+    position: relative;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
 }
 
-.previewBadge {
+.contentH3 {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 700;
+    color: #ffd700;
+    margin: 1.5rem 0 0.25rem 0;
+}
+
+.contentP {
+    font-size: 16px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
+.contentList {
+    margin: 0.5rem 0 1rem 1.2rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contentListItem {
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.contentListItem::marker {
+    color: #ffd700;
+}
+
+/* Signature Box */
+.signatureCard {
+    position: relative;
+    width: 100%;
+    padding: 2.5rem;
+    background: rgba(18, 12, 28, 0.85);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.signatureBadge {
     display: inline-flex;
     align-items: center;
-    padding: 4px 14px;
     font-family: var(--font-display);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.14em;
     color: #ffd700;
-    background: rgba(255, 215, 0, 0.1);
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    border-radius: 9999px;
 }
 
-.previewTitle {
+.signatureTitle {
     font-family: var(--font-display);
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     color: #ffffff;
     margin: 0;
@@ -151,22 +227,49 @@
     background: linear-gradient(135deg, #FFF2A3 0%, #FFD700 50%, #FFAE19 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.4));
+    filter: drop-shadow(0 0 14px rgba(255, 215, 0, 0.35));
 }
 
-.previewDesc {
+.signatureDesc {
     font-size: 14.5px;
-    color: rgba(255, 255, 255, 0.65);
     line-height: 1.7;
-    max-width: 520px;
+    color: rgba(255, 255, 255, 0.65);
     margin: 0;
+}
+
+.signatureActions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.secondaryBtn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 22px;
+    font-family: var(--font-display);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.secondaryBtn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 215, 0, 0.4);
+    color: #ffd700;
 }
 
 .ctaBtn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-top: 10px;
     padding: 10px 24px;
     font-family: var(--font-display);
     font-size: 12.5px;
@@ -184,4 +287,13 @@
 .ctaBtn:hover {
     transform: translateY(-2px);
     box-shadow: 0 0 28px rgba(255, 215, 0, 0.55);
+}
+
+@media (max-width: 768px) {
+    .coverWrapper {
+        height: 260px;
+    }
+    .signatureCard {
+        padding: 1.75rem;
+    }
 }

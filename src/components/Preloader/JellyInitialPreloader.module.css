@@ -1,0 +1,212 @@
+.preloaderOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: #08060c;
+  background-image: 
+    radial-gradient(circle at 50% 40%, rgba(147, 51, 234, 0.22) 0%, transparent 55%),
+    radial-gradient(circle at 50% 65%, rgba(245, 158, 11, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 60%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  user-select: none;
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* Background Cosmic Grid / Aura */
+.cosmicAura {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, rgba(147, 51, 234, 0.1) 40%, transparent 70%);
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.centerContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 440px;
+  width: 90%;
+}
+
+/* ── Breathing Talisman Medallion ── */
+.talismanMedallion {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: rgba(18, 12, 28, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid rgba(255, 215, 0, 0.35);
+  box-shadow: 
+    0 16px 45px rgba(0, 0, 0, 0.85),
+    0 0 35px rgba(255, 215, 0, 0.35),
+    inset 0 0 20px rgba(255, 215, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  animation: talismanBreathe 2.4s ease-in-out infinite;
+}
+
+.talismanRing {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 215, 0, 0.4);
+  animation: ringSpin 20s linear infinite;
+  pointer-events: none;
+}
+
+.crownSvg {
+  width: 58px;
+  height: 58px;
+  filter: drop-shadow(0 4px 14px rgba(255, 215, 0, 0.5));
+}
+
+.floatingDiamond {
+  animation: diamondFloat 2.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* ── Brand Typography ── */
+.brandTitle {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.goldText {
+  background: linear-gradient(135deg, #FFF2A3 0%, #FFD700 50%, #FFAE19 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  filter: drop-shadow(0 2px 10px rgba(255, 215, 0, 0.35));
+}
+
+.brandSub {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+/* ── High-Tech Progress Track ── */
+.progressSection {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.trackWrapper {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #FFD700 0%, #FFF2A3 60%, #00FF88 100%);
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.8), 0 0 8px rgba(0, 255, 136, 0.5);
+  transition: width 0.08s linear;
+}
+
+.progressInfoRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.statusTicker {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: uppercase;
+  font-family: monospace;
+}
+
+.percentCounter {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #FFD700;
+  font-family: monospace;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* ── Keyframe Animations ── */
+@keyframes talismanBreathe {
+  0% {
+    transform: scale(1);
+    box-shadow: 
+      0 16px 45px rgba(0, 0, 0, 0.85),
+      0 0 25px rgba(255, 215, 0, 0.25),
+      inset 0 0 15px rgba(255, 215, 0, 0.1);
+  }
+  50% {
+    transform: scale(1.07);
+    box-shadow: 
+      0 20px 55px rgba(0, 0, 0, 0.9),
+      0 0 55px rgba(255, 215, 0, 0.6),
+      inset 0 0 25px rgba(255, 215, 0, 0.25);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 
+      0 16px 45px rgba(0, 0, 0, 0.85),
+      0 0 25px rgba(255, 215, 0, 0.25),
+      inset 0 0 15px rgba(255, 215, 0, 0.1);
+  }
+}
+
+@keyframes ringSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes diamondFloat {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2.5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

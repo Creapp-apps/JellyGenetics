@@ -2,10 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import AgeGate from '@/components/AgeGate/AgeGate'
+import JellyInitialPreloader from '@/components/Preloader/JellyInitialPreloader'
 import { useAdminStore } from '@/store/useAdminStore'
+
+import styles from './AppEntry.module.css'
 
 export default function AppEntry({ children }: { children: React.ReactNode }) {
     const [verified, setVerified] = useState<boolean | null>(null)
+    const [preloaded, setPreloaded] = useState(false)
+    const [isRevealed, setIsRevealed] = useState(false)
 
     useEffect(() => {
         const stored = localStorage.getItem('jelly-age-verified')
@@ -21,7 +26,7 @@ export default function AppEntry({ children }: { children: React.ReactNode }) {
             <div style={{
                 width: '100vw',
                 height: '100vh',
-                background: '#0A0A0B',
+                background: '#08060c',
             }} />
         )
     }
@@ -30,5 +35,23 @@ export default function AppEntry({ children }: { children: React.ReactNode }) {
         return <AgeGate onVerified={() => setVerified(true)} />
     }
 
-    return <>{children}</>
+    return (
+        <>
+            {!preloaded && (
+                <JellyInitialPreloader
+                    durationMs={3000}
+                    onStartExit={() => setIsRevealed(true)}
+                    onComplete={() => {
+                        setPreloaded(true)
+                        setIsRevealed(true)
+                    }}
+                />
+            )}
+            <div
+                className={`${styles.appWrapper} ${isRevealed ? styles.appWrapperRevealed : ''}`}
+            >
+                {children}
+            </div>
+        </>
+    )
 }
